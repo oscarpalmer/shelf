@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="vendor/autoload.php">
+  <testsuites>
+    <testsuite name="Shelf Test Suite">
+      <directory>tests/oscarpalmer/Shelf</directory>
+    </testsuite>
+  </testsuites>
+  <filter>
+    <whitelist>
+      <directory suffix=".php">src/oscarpalmer/Shelf</directory>
+    </whitelist>
+  </filter>
+  <logging>
+    <log type="coverage-clover" target="/tmp/coverage.xml"/>
+  </logging>
+  <listeners>
+    <listener class="League\PHPUnitCoverageListener\Listener">
+      <arguments>
+        <array>
+          <element key="printer">
+            <object class="League\PHPUnitCoverageListener\Printer\StdOut"/>
+          </element>
+          <element key="hook">
+            <object class="League\PHPUnitCoverageListener\Hook\Travis"/>
+          </element>
+          <element key="namespace">
+            <string>oscarpalmer\Shelf</string>
+          </element>
+          <element key="repo_token">
+            <string>2BuVpcjq1XhVE8znaxsMqjhpFPrYDZ5Ct</string>
+          </element>
+          <element key="target_url">
+            <string>https://coveralls.io/api/v1/jobs</string>
+          </element>
+          <element key="coverage_dir">
+            <string>/tmp</string>
+          </element>
+        </array>
+      </arguments>
+    </listener>
+  </listeners>
+</phpunit>
