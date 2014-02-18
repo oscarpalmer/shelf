@@ -103,4 +103,16 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             $this->assertInstanceOf("\InvalidArgumentException", $e);
         }
     }
+
+    public function testWrite()
+    {
+        $response = $this->response;
+
+        $this->assertInternalType("string", $response->getBody());
+        $this->assertSame("Test.", $response->getBody());
+
+        $response->write(" - Shelf");
+        $this->assertInternalType("string", $response->getBody());
+        $this->assertSame("Test. - Shelf", $response->getBody());
+    }
 }
