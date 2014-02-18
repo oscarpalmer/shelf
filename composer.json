@@ -7,7 +7,7 @@
   }],
   "autoload": {
     "psr-0": {
-      "oscarpalmer\\Shelf": ["src/"]
+      "oscarpalmer\\Shelf": ["src/", "tests/"]
     }
   },
   "description": "A Rack-like interface.",
@@ -22,7 +22,7 @@
     "php": ">=5.3.0"
   },
   "require-dev": {
-    "league/phpunit-coverage-listener": "~1.1"
+    "league/phpunit-coverage-listener": "dev-master"
   },
   "type": "library"
 }
