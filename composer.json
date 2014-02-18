@@ -1,0 +1,28 @@
+{
+  "author": [{
+    "email": "opalmer@me.com",
+    "homepage": "http://opalmer.me",
+    "name": "Oscar Palmér",
+    "role": "developer"
+  }],
+  "autoload": {
+    "psr-0": {
+      "oscarpalmer\\Shelf": ["src/"]
+    }
+  },
+  "description": "A Rack-like interface.",
+  "homepage": "http://git.io/shelf",
+  "keywords": [
+    "framework",
+    "http"
+  ],
+  "license": "MIT",
+  "name": "oscarpalmer/shelf",
+  "require": {
+    "php": ">=5.3.0"
+  },
+  "require-dev": {
+    "league/phpunit-coverage-listener": "~1.1"
+  },
+  "type": "library"
+}
