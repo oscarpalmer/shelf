@@ -20,7 +20,7 @@ class Shelf
      * @param  array   $server Server parameters. Optional; defaults to $_SERVER.
      * @return Request A new Request object.
      */
-    public static function Request(array $server = null)
+    public static function request(array $server = null)
     {
         return new Request($server);
     }
@@ -34,7 +34,7 @@ class Shelf
      * @param  array    $headers Response headers.
      * @return Response A new Response object.
      */
-    public static function Response(
+    public static function response(
         $status = 200,
         $body = "",
         array $headers = array("Content-Type" => "text/html")

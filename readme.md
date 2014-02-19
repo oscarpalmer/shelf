@@ -51,8 +51,8 @@ $response->finish(); # Sets headers and echoes the body.
 Shelf::VERSION;                  # Current Shelf version number.
 
 # Methods
-Shelf::Request();                # Creates a new Request object.
-Shelf::Response();               # Creates a new Response object.
+Shelf::request();                # Creates a new Request object.
+Shelf::response();               # Creates a new Response object.
                                  # Check below for more details on constructor parameters.
 ```
 

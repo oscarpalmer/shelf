@@ -14,11 +14,11 @@ class ShelfTest extends \PHPUnit_Framework_TestCase
 
     public function testStaticConstructors()
     {
-        $request = Shelf::Request();
+        $request = Shelf::request();
         $this->assertNotNull($request);
         $this->assertInstanceOf("oscarpalmer\Shelf\Request", $request);
 
-        $response = Shelf::Response();
+        $response = Shelf::response();
         $this->assertNotNull($response);
         $this->assertInstanceOf("oscarpalmer\Shelf\Response", $response);
     }
