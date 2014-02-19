@@ -50,6 +50,7 @@ class Request
      */
     public function __get($key)
     {
+        # Prioritise parameters created by Shelf.
         if (isset($this->$key)) {
             return $this->$key;
         }

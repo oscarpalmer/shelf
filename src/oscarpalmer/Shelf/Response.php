@@ -126,13 +126,12 @@ class Response
     /**
      * Get a specific response header.
      *
-     * @param  string $key     Key for header.
-     * @param  mixed  $default Default value.
-     * @return mixed  Found header or default value.
+     * @param  string $key Key for header.
+     * @return mixed  Found header or null.
      */
-    public function getHeader($key, $default = null)
+    public function getHeader($key)
     {
-        return $this->headers->get($key, $default);
+        return $this->headers->get($key);
     }
 
     /**

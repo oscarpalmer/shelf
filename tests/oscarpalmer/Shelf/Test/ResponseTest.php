@@ -114,5 +114,11 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $response->write(" - Shelf");
         $this->assertInternalType("string", $response->getBody());
         $this->assertSame("Test. - Shelf", $response->getBody());
+
+        try {
+            $response->write(array());
+        } catch (\Exception $e) {
+            $this->assertInstanceOf("\InvalidArgumentException", $e);
+        }
     }
 }

@@ -20,7 +20,7 @@ Shelf is available via Composer.
 
 ### Basic usage
 
-Here are two small examples to get you up and running in ~ten seconds. Please consult the [API reference](#API) if you get stuck or want to learn more.
+Here are two small examples to get you up and running in ~ten seconds. Please consult the [API reference](#api) if you get stuck or want to learn more.
 
 #### Request
 
@@ -43,6 +43,18 @@ $response->finish(); # Sets headers and echoes the body.
 ```
 
 ## API
+
+### Shelf
+
+```php
+# Constants
+Shelf::VERSION;                  # Current Shelf version number.
+
+# Methods
+Shelf::Request();                # Creates a new Request object.
+Shelf::Response();               # Creates a new Response object.
+                                 # Check below for more details on constructor parameters.
+```
 
 ### Request
 
@@ -91,6 +103,21 @@ $response->setBody($body);       # Set the response body; must be scalar.
 $response->setHeader($k, $v);    # Set a new response header; both key and value must be strings.
 $response->setStatus($status);   # Set the response status code; must be integer.
 $response->write($appendix);     # Append content to the response body; must be scalar.
+```
+
+### Blob
+
+Blob is a container class for parameter storage.
+
+```php
+# Constructor
+$blob = new Blob($array);        # The parameter is optional and defaults to an empty array.
+
+# Methods
+$blob->delete("key");            # Delete item; returns Blob object for chaining.
+$blob->get("key", "default");    # Get Blob parameter by key with an optional default value.
+$blob->has("key");               # Check if key exists in Blob.
+$blob->set("key", "value");      # Set value for key; returns Blob object for chaining.
 ```
 
 ## Todo
