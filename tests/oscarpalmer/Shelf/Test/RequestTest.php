@@ -32,6 +32,13 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $request = $this->request;
 
+        $this->assertNotNull($request->data);
+        $this->assertInstanceOf("oscarpalmer\Shelf\Blob", $request->data);
+        $this->assertNotNull($request->query);
+        $this->assertInstanceOf("oscarpalmer\Shelf\Blob", $request->query);
+        $this->assertNotNull($request->server);
+        $this->assertInstanceOf("oscarpalmer\Shelf\Blob", $request->server);
+
         $this->assertSame("/path", $request->path_info);
         $this->assertSame("HTTP/1.0", $request->protocol);
         $this->assertSame("GET", $request->request_method);

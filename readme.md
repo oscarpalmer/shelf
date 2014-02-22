@@ -39,7 +39,7 @@ $response = new Response(
     array("Content-Type" => "text/plain")
 );
 
-$response->finish(); # Sets headers and echoes the body.
+$response->finish();
 ```
 
 ## API
@@ -49,18 +49,20 @@ $response->finish(); # Sets headers and echoes the body.
 ```php
 # Constants
 Shelf::VERSION;                  # Current Shelf version number.
-
-# Methods
-Shelf::request();                # Creates a new Request object.
-Shelf::response();               # Creates a new Response object.
-                                 # Check below for more details on constructor parameters.
 ```
 
 ### Request
 
 ```php
 # Constructor
-$request = new Request($server); # The parameter is optional, but useful for testing; defaults to $_SERVER.
+$request = new Request($s, $q, $d); # Server, query, and data parameters.
+Request::fromGlobals();             # Static constructor for a superglobal Request object.
+
+# Blobs
+# Check below for info on how to use Blobs
+$request->data;                  # A Blob of request (~$_POST) parameters.
+$request->query;                 # A Blob of query (~$_GET) parameters.
+$request->server;                # A Blob of server (~$_SERVER) parameters.
 
 # Variables
 $request->path_info;             # Current path.
@@ -114,6 +116,7 @@ Blob is a container class for parameter storage.
 $blob = new Blob($array);        # The parameter is optional and defaults to an empty array.
 
 # Methods
+$blob->all();                    # Get the actual Blob array.
 $blob->delete("key");            # Delete item; returns Blob object for chaining.
 $blob->get("key", "default");    # Get Blob parameter by key with an optional default value.
 $blob->has("key");               # Check if key exists in Blob.
@@ -123,7 +126,6 @@ $blob->set("key", "value");      # Set value for key; returns Blob object for ch
 ## Todo
 
 - More and better documentation.
-- Access to `$_GET` and `$_POST`-parameters.
 - Helper methods for both `Request` and `Response`.
 - Properly handle `204`, `205`, and `304`-responses.
 - `$_COOKIES`, `$_FILES`, and `$_SESSION`.

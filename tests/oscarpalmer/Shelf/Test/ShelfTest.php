@@ -11,15 +11,4 @@ class ShelfTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType("string", Shelf::VERSION);
         $this->assertStringMatchesFormat("%d.%d.%d", Shelf::VERSION);
     }
-
-    public function testStaticConstructors()
-    {
-        $request = Shelf::request();
-        $this->assertNotNull($request);
-        $this->assertInstanceOf("oscarpalmer\Shelf\Request", $request);
-
-        $response = Shelf::response();
-        $this->assertNotNull($response);
-        $this->assertInstanceOf("oscarpalmer\Shelf\Response", $response);
-    }
 }

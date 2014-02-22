@@ -8,6 +8,11 @@ namespace oscarpalmer\Shelf;
 class Request
 {
     /**
+     * @var Blob Request parameters.
+     */
+    protected $data;
+
+    /**
      * @var string Current path.
      */
     protected $path_info;
@@ -18,23 +23,35 @@ class Request
     protected $protocol;
 
     /**
+     * @var Blob Query parameters.
+     */
+    protected $query;
+
+    /**
      * @var string Current request method.
      */
     protected $request_method;
 
     /**
-     * @var array Server parameters.
+     * @var Blob Server parameters.
      */
     protected $server;
 
     /**
-     * Creates a new Request object from array of server parameters or superglobals.
+     * Creates a new Request object from arrays of server, query, and request parameters.
      *
-     * @param array $server Server parameters. Optional; defaults to $_SERVER.
+     * @param array $server Server parameters.
+     * @param array $query  Query parameters.
+     * @param array $data   Request parameters.
      */
-    public function __construct(array $server = null)
-    {
-        $this->server = new Blob($server ?: $_SERVER);
+    public function __construct(
+        array $server = array(),
+        array $query = array(),
+        array $data = array()
+    ) {
+        $this->data = new Blob($data);
+        $this->query = new Blob($query);
+        $this->server = new Blob($server);
 
         $this->protocol = $this->server->get("SERVER_PROTOCOL", "HTTP/1.1");
         $this->request_method = $this->server->get("REQUEST_METHOD", "GET");
@@ -132,5 +149,17 @@ class Request
         );
 
         $this->path_info = $path;
+    }
+
+    /** Static functions. */
+
+    /**
+     * Creates a new Request object based on superglobals.
+     *
+     * @return Request A new Request object.
+     */
+    public static function fromGlobals()
+    {
+        return new static($_SERVER, $_GET, $_POST);
     }
 }

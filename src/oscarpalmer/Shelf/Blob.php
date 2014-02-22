@@ -25,6 +25,16 @@ class Blob
     /** Public functions. */
 
     /**
+     * Get the actual Blob array.
+     *
+     * @return array Blob array.
+     */
+    public function all()
+    {
+        return $this->blob;
+    }
+
+    /**
      * Delete value for key in Blob.
      *
      * @param  mixed $key Key to delete.
@@ -40,18 +50,14 @@ class Blob
     }
 
     /**
-     * Get the full Blob or value for a specific key.
+     * Get the value for a specific key.
      *
-     * @param  mixed $key     Key to get; none/null to get full Blob.
-     * @param  mixed $default Default value to return.
+     * @param  mixed $key     Key to look for.
+     * @param  mixed $default Default value.
      * @return mixed Found or default value.
      */
-    public function get($key = null, $default = null)
+    public function get($key, $default = null)
     {
-        if (is_null($key)) {
-            return $this->blob;
-        }
-
         if (array_key_exists($key, $this->blob)) {
             return $this->blob[$key];
         }

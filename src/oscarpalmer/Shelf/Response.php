@@ -105,7 +105,7 @@ class Response
         if (headers_sent() === false) {
             header("HTTP/1.1 " . $this->statuses[$this->status]);
 
-            foreach ($this->headers->get() as $key => $value) {
+            foreach ($this->headers->all() as $key => $value) {
                 header("{$key}: {$value}", false);
             }
         }
@@ -141,7 +141,7 @@ class Response
      */
     public function getHeaders()
     {
-        return $this->headers->get();
+        return $this->headers->all();
     }
 
     /**

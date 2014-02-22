@@ -38,7 +38,7 @@ class BlobTest extends \PHPUnit_Framework_TestCase
         $this->assertSame("value", $this->blob->get("key"));
         $this->assertSame("default", $this->blob->get("this-key-doesnt-exist", "default"));
 
-        $this->assertCount(3, $this->blob->get());
+        $this->assertCount(3, $this->blob->all());
     }
 
     public function testHas()
