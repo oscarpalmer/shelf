@@ -130,6 +130,6 @@ $blob->set("key", "value");      # Set value for key; returns Blob object for ch
 - Properly handle `204`, `205`, and `304`-responses.
 - `$_COOKIES`, `$_FILES`, and `$_SESSION`.
 
-## Licence
+## License
 
-Copyright (c) 2014 Oscar Palmér. MIT Licensed.
+MIT Licensed; see [the LICENSE file](LICENSE) for more info.
