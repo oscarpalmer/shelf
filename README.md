@@ -25,6 +25,8 @@ Here are two small examples to get you up and running in ~ten seconds. Please co
 #### Request
 
 ```php
+use oscarpalmer\Shelf\Request;
+
 $request = new Request($server);
 
 echo $request->path_info;
@@ -33,13 +35,15 @@ echo $request->path_info;
 #### Response
 
 ```php
+use oscarpalmer\Shelf\Response;
+
 $response = new Response(
     200,
     "Hello, world!",
     array("Content-Type" => "text/plain")
 );
 
-$response->finish();
+$response->finish($request);
 ```
 
 ## API
@@ -91,7 +95,8 @@ $response = new Response(
 );
 
 # Methods
-$response->finish();             # Sets the response headers and echoes the response body.
+$response->finish($request);     # Sets the response headers and echoes the response body.
+                                 # The parameter must be a Shelf Request object.
 
 # Getters
 $response->getBody();            # Returns the current response body.
@@ -127,7 +132,6 @@ $blob->set("key", "value");      # Set value for key; returns Blob object for ch
 
 - More and better documentation.
 - Helper methods for both `Request` and `Response`.
-- Properly handle `204`, `205`, and `304`-responses.
 - `$_COOKIES`, `$_FILES`, and `$_SESSION`.
 
 ## License

@@ -87,7 +87,7 @@ class Response
     public function __construct(
         $status = 200,
         $body = "",
-        array $headers = array("Content-Type" => "text/html")
+        array $headers = array("content-type" => "text/html; charset=utf-8")
     ) {
         $this->setStatus($status);
         $this->setBody($body);
@@ -100,10 +100,25 @@ class Response
     /**
      * Finish the response; send headers and echo the response body.
      */
-    public function finish()
+    public function finish(Request $request)
     {
+        if (in_array($this->status, array(100, 101, 204, 205, 304))) {
+            $this->body = null;
+            $this->headers->delete("content-length");
+            $this->headers->delete("content-type");
+        }
+
+        $length = strlen($this->body);
+
+        if ($request->isHead()) {
+            $length = strlen($this->body);
+            $this->body = null;
+        }
+
+        $this->headers->set("content-length", $length);
+
         if (headers_sent() === false) {
-            header("HTTP/1.1 " . $this->statuses[$this->status]);
+            header("{$request->protocol} " . $this->statuses[$this->status]);
 
             foreach ($this->headers->all() as $key => $value) {
                 header("{$key}: {$value}", false);

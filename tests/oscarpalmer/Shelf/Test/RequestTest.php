@@ -22,6 +22,11 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertNotNull($this->request);
         $this->assertInstanceOf("oscarpalmer\Shelf\Request", $this->request);
+
+        $superGlobalRequest = Request::fromGlobals();
+
+        $this->assertNotNull($superGlobalRequest);
+        $this->assertInstanceOf("oscarpalmer\Shelf\Request", $superGlobalRequest);
     }
 
     /**
