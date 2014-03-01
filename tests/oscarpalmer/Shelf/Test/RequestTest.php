@@ -37,12 +37,16 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $request = $this->request;
 
-        $this->assertNotNull($request->data);
-        $this->assertInstanceOf("oscarpalmer\Shelf\Blob", $request->data);
-        $this->assertNotNull($request->query);
-        $this->assertInstanceOf("oscarpalmer\Shelf\Blob", $request->query);
-        $this->assertNotNull($request->server);
-        $this->assertInstanceOf("oscarpalmer\Shelf\Blob", $request->server);
+        foreach (array(
+            $request->cookies,
+            $request->data,
+            $request->files,
+            $request->query,
+            $request->server
+        ) as $blob) {
+            $this->assertNotNull($blob);
+            $this->assertInstanceOf("oscarpalmer\Shelf\Blob", $blob);
+        }
 
         $this->assertSame("/path", $request->path_info);
         $this->assertSame("HTTP/1.0", $request->protocol);

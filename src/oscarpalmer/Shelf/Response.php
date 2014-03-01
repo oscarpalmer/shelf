@@ -29,7 +29,6 @@ class Response
         # Informational
         100 => "100 Continue",
         101 => "101 Switching Protocols",
-        102 => "102 Processing",
         # Success!
         200 => "200 OK",
         201 => "201 Created",
@@ -102,20 +101,19 @@ class Response
      */
     public function finish(Request $request)
     {
-        if (in_array($this->status, array(100, 101, 204, 205, 304))) {
-            $this->body = null;
-            $this->headers->delete("content-length");
-            $this->headers->delete("content-type");
-        }
-
+        $empty = in_array($this->status, array(100, 101, 204, 205, 304));
         $length = strlen($this->body);
 
-        if ($request->isHead()) {
-            $length = strlen($this->body);
+        if ($request->isHead() || $empty) {
             $this->body = null;
         }
 
         $this->headers->set("content-length", $length);
+
+        if ($empty) {
+            $this->headers->delete("content-length");
+            $this->headers->delete("content-type");
+        }
 
         if (headers_sent() === false) {
             header("{$request->protocol} " . $this->statuses[$this->status]);

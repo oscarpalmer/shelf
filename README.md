@@ -64,7 +64,9 @@ Request::fromGlobals();             # Static constructor for a superglobal Reque
 
 # Blobs
 # Check below for info on how to use Blobs
+$request->cookies;               # A Blob of cookies (~$_COOKIE) parameters.
 $request->data;                  # A Blob of request (~$_POST) parameters.
+$request->files;                 # A Blob of files (~$_FILES) parameters.
 $request->query;                 # A Blob of query (~$_GET) parameters.
 $request->server;                # A Blob of server (~$_SERVER) parameters.
 
@@ -132,7 +134,7 @@ $blob->set("key", "value");      # Set value for key; returns Blob object for ch
 
 - More and better documentation.
 - Helper methods for both `Request` and `Response`.
-- `$_COOKIES`, `$_FILES`, and `$_SESSION`.
+- Simple access to`$_SESSION`.
 
 ## License
 
