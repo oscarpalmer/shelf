@@ -191,7 +191,10 @@ class Response
             return $this;
         }
 
-        throw new \InvalidArgumentException("Body must be null or scalar, " . gettype($body) . " given.");
+        $prefix = "Body must be null or scalar, ";
+        $suffix = gettype($body) . " given.";
+
+        throw new \InvalidArgumentException("{$prefix}{$suffix}");
     }
 
     /**
@@ -250,6 +253,9 @@ class Response
             return $this;
         }
 
-        throw new \InvalidArgumentException("Appended content must be null or scalar, " . gettype($appendix) . " given.");
+        $prefix = "Appended content must be null or scalar, ";
+        $suffix = gettype($appendix) . " given.";
+
+        throw new \InvalidArgumentException("{$prefix}{$suffix}");
     }
 }
