@@ -180,18 +180,18 @@ class Response
     /**
      * Set the response body.
      *
-     * @param  scalar   $body Scalar value to set.
-     * @return Response Response object for optional chaining.
+     * @param  null|scalar $body Scalar value to set.
+     * @return Response    Response object for optional chaining.
      */
     public function setBody($body)
     {
-        if (is_scalar($body)) {
+        if (is_null($body) || is_scalar($body)) {
             $this->body = (string) $body;
 
             return $this;
         }
 
-        throw new \InvalidArgumentException("Body must be scalar, " . gettype($body) . " given.");
+        throw new \InvalidArgumentException("Body must be null or scalar, " . gettype($body) . " given.");
     }
 
     /**
@@ -239,17 +239,17 @@ class Response
     /**
      * Write (append) content to the response body.
      *
-     * @param  scalar   $appendix Content to append.
-     * @return Response Response object for optional chaining.
+     * @param  null|scalar $appendix Content to append.
+     * @return Response    Response object for optional chaining.
      */
     public function write($appendix)
     {
-        if (is_scalar($appendix)) {
+        if (is_null($appendix) || is_scalar($appendix)) {
             $this->body .= (string) $appendix;
 
             return $this;
         }
 
-        throw new \InvalidArgumentException("Appended content must be scalar, " . gettype($appendix) . " given.");
+        throw new \InvalidArgumentException("Appended content must be null or scalar, " . gettype($appendix) . " given.");
     }
 }
