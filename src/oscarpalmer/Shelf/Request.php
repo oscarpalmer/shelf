@@ -8,9 +8,19 @@ namespace oscarpalmer\Shelf;
 class Request
 {
     /**
+     * @var Blob Cookie parameters.
+     */
+    protected $cookies;
+
+    /**
      * @var Blob Request parameters.
      */
     protected $data;
+
+    /**
+     * @var Blob Files parameters.
+     */
+    protected $files;
 
     /**
      * @var string Current path.
@@ -40,16 +50,22 @@ class Request
     /**
      * Creates a new Request object from arrays of server, query, and request parameters.
      *
-     * @param array $server Server parameters.
-     * @param array $query  Query parameters.
-     * @param array $data   Request parameters.
+     * @param array $server  Server parameters.
+     * @param array $query   Query parameters.
+     * @param array $data    Request parameters.
+     * @param array $cookies Cookie parameters.
+     * @param array $files   Files parameters.
      */
     public function __construct(
         array $server = array(),
         array $query = array(),
-        array $data = array()
+        array $data = array(),
+        array $cookies = array(),
+        array $files = array()
     ) {
+        $this->cookies = new Blob($cookies);
         $this->data = new Blob($data);
+        $this->files = new Blob($files);
         $this->query = new Blob($query);
         $this->server = new Blob($server);
 
@@ -160,6 +176,6 @@ class Request
      */
     public static function fromGlobals()
     {
-        return new static($_SERVER, $_GET, $_POST);
+        return new static($_SERVER, $_GET, $_POST, $_COOKIE, $_FILES);
     }
 }

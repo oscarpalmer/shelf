@@ -2,11 +2,12 @@
 
 namespace oscarpalmer\Shelf\Test;
 
+use oscarpalmer\Shelf\Request;
 use oscarpalmer\Shelf\Response;
 
 class ResponseTest extends \PHPUnit_Framework_TestCase
 {
-    # Mock Response.
+    protected $request;
     protected $response;
 
     public function setUp()
@@ -24,11 +25,26 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf("oscarpalmer\Shelf\Response", $this->response);
     }
 
+    public function testEmptyResponses()
+    {
+        # Informational, no-content, and not-modified responses.
+        foreach (array(100, 101, 204, 205, 304) as $status) {
+            $response = new Response($status, "This won't be echoed.");
+            $response->finish(new Request);
+            $this->expectOutputString("");
+        }
+
+        # HEAD response.
+        $response = new Response(200, "This won't be echoed.");
+        $response->finish(new Request(array("REQUEST_METHOD" => "HEAD")));
+        $this->expectOutputString("");
+    }
+
     public function testFinish()
     {
         $response = $this->response;
 
-        $response->finish();
+        $response->finish(new Request);
 
         $this->expectOutputString("Test.");
     }

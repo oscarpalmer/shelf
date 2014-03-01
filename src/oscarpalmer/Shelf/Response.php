@@ -29,7 +29,6 @@ class Response
         # Informational
         100 => "100 Continue",
         101 => "101 Switching Protocols",
-        102 => "102 Processing",
         # Success!
         200 => "200 OK",
         201 => "201 Created",
@@ -87,7 +86,7 @@ class Response
     public function __construct(
         $status = 200,
         $body = "",
-        array $headers = array("Content-Type" => "text/html")
+        array $headers = array("content-type" => "text/html; charset=utf-8")
     ) {
         $this->setStatus($status);
         $this->setBody($body);
@@ -100,10 +99,24 @@ class Response
     /**
      * Finish the response; send headers and echo the response body.
      */
-    public function finish()
+    public function finish(Request $request)
     {
+        $empty = in_array($this->status, array(100, 101, 204, 205, 304));
+        $length = strlen($this->body);
+
+        if ($request->isHead() || $empty) {
+            $this->body = null;
+        }
+
+        $this->headers->set("content-length", $length);
+
+        if ($empty) {
+            $this->headers->delete("content-length");
+            $this->headers->delete("content-type");
+        }
+
         if (headers_sent() === false) {
-            header("HTTP/1.1 " . $this->statuses[$this->status]);
+            header("{$request->protocol} " . $this->statuses[$this->status]);
 
             foreach ($this->headers->all() as $key => $value) {
                 header("{$key}: {$value}", false);
