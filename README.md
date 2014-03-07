@@ -13,7 +13,7 @@ Shelf is available via Composer.
 ```json
 {
   "require": {
-    "oscarpalmer/shelf": "dev-master"
+    "oscarpalmer/shelf": "1.*"
   }
 }
 ```

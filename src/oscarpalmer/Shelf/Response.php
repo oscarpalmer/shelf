@@ -101,7 +101,7 @@ class Response
      */
     public function finish(Request $request)
     {
-        $empty = in_array($this->status, array(100, 101, 204, 205, 304));
+        $empty = in_array($this->status, array(100, 101, 204, 205, 301, 302, 303, 304, 307));
         $length = strlen($this->body);
 
         if ($request->isHead() || $empty) {
