@@ -59,8 +59,8 @@ Shelf::VERSION;                  # Current Shelf version number.
 
 ```php
 # Constructor
-$request = new Request($s, $q, $d); # Server, query, and data parameters.
-Request::fromGlobals();             # Static constructor for a superglobal Request object.
+$request = new Request($s, $q, $d, $c, $f); # Server, query, data, cookie, and files parameters.
+Request::fromGlobals();                     # Static constructor for a superglobal Request object.
 
 # Blobs
 # Check below for info on how to use Blobs
@@ -132,8 +132,6 @@ $blob->set("key", "value");      # Set value for key; returns Blob object for ch
 
 ## Todo
 
-- More and better documentation.
-- Helper methods for both `Request` and `Response`.
 - Simple access to`$_SESSION`.
 
 ## License

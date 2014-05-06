@@ -65,7 +65,6 @@ class Response
         415 => "415 Unsupported Media Type",
         416 => "416 Requested Range Not Satisfiable",
         417 => "417 Expectation Failed",
-        418 => "418 I'm a teapot",
         # Server errors.
         500 => "500 Internal Server Error",
         501 => "501 Not Implemented",
@@ -116,7 +115,7 @@ class Response
         }
 
         if (headers_sent() === false) {
-            header("{$request->protocol} " . $this->statuses[$this->status]);
+            header("{$request->protocol} {$this->statuses[$this->status]}");
 
             foreach ($this->headers->all() as $key => $value) {
                 header("{$key}: {$value}", false);
