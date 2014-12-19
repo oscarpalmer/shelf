@@ -94,6 +94,16 @@ class Request
     /** Public functions. */
 
     /**
+     * Is it an AJAX request?
+     *
+     * @return bool True if requested via AJAX.
+     */
+    public function isAjax()
+    {
+        return $this->server->get("HTTP_X_REQUESTED_WITH") === "XMLHttpRequest";
+    }
+
+    /**
      * Is it a DELETE request?
      *
      * @return bool True if request method is DELETE.
