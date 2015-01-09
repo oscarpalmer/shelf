@@ -13,8 +13,8 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->response = new Response(
-            200,
             "Test.",
+            200,
             array("Content-Type" => "text/plain")
         );
     }
@@ -28,25 +28,32 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testEmptyResponses()
     {
         # Informational, no-content, and not-modified responses.
-        foreach (array(100, 101, 204, 205, 304) as $status) {
-            $response = new Response($status, "This won't be echoed.");
+        foreach (array(100, 101, 204, 205, 301, 302, 303, 304, 307) as $status) {
+            $response = new Response("This won't be echoed.", $status);
             $response->finish(new Request);
             $this->expectOutputString("");
         }
 
         # HEAD response.
-        $response = new Response(200, "This won't be echoed.");
+        $response = new Response("This won't be echoed.");
         $response->finish(new Request(array("REQUEST_METHOD" => "HEAD")));
         $this->expectOutputString("");
     }
 
     public function testFinish()
     {
+        $request = new Request;
         $response = $this->response;
 
-        $response->finish(new Request);
+        $response->finish($request);
 
         $this->expectOutputString("Test.");
+
+        try {
+            $response->finish($request);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf("LogicException", $e);
+        }
     }
 
     public function testGetHeaders()
@@ -75,7 +82,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         try {
             $response->setBody(array());
         } catch (\Exception $e) {
-            $this->assertInstanceOf("\InvalidArgumentException", $e);
+            $this->assertInstanceOf("InvalidArgumentException", $e);
         }
     }
 
@@ -92,7 +99,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         try {
             $response->setHeader(null, array());
         } catch (\Exception $e) {
-            $this->assertInstanceOf("\InvalidArgumentException", $e);
+            $this->assertInstanceOf("InvalidArgumentException", $e);
         }
     }
 
@@ -110,13 +117,13 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         try {
             $response->setStatus(1234);
         } catch (\Exception $e) {
-            $this->assertInstanceOf("\LogicException", $e);
+            $this->assertInstanceOf("LogicException", $e);
         }
 
         try {
             $response->setStatus(null);
         } catch (\Exception $e) {
-            $this->assertInstanceOf("\InvalidArgumentException", $e);
+            $this->assertInstanceOf("InvalidArgumentException", $e);
         }
     }
 
@@ -134,7 +141,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         try {
             $response->write(array());
         } catch (\Exception $e) {
-            $this->assertInstanceOf("\InvalidArgumentException", $e);
+            $this->assertInstanceOf("InvalidArgumentException", $e);
         }
     }
 }

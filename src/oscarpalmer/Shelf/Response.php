@@ -18,9 +18,24 @@ class Response
     protected $headers;
 
     /**
+     * @var Request The Request object used by the response.
+     */
+    protected $request;
+
+    /**
      * @var int Response status code.
      */
     protected $status;
+
+    /**
+     * @var bool Has the response finished?
+     */
+    protected $finished = false;
+
+    /**
+     * @var array Status codes for no-body responses.
+     */
+    protected $no_body = array(100, 101, 204, 205, 301, 302, 303, 304, 307);
 
     /**
      * @var array Response status messages.
@@ -78,13 +93,13 @@ class Response
      * Creates a new Response object;
      * defaults to a clean and successful HTML response.
      *
-     * @param int    $status  Response status code.
-     * @param scalar $body    Response body.
-     * @param array  $headers Response headers.
+     * @param null|scalar $body    Response body.
+     * @param int         $status  Response status code.
+     * @param array       $headers Response headers.
      */
     public function __construct(
-        $status = 200,
         $body = "",
+        $status = 200,
         array $headers = array("content-type" => "text/html; charset=utf-8")
     ) {
         $this->setStatus($status);
@@ -96,33 +111,28 @@ class Response
     /** Public functions. */
 
     /**
-     * Finish the response; send headers and echo the response body.
+     * Finish the response and return the object.
+     *
+     * @param  Request  Request object used create a nice response.
+     * @return Response The Response object.
      */
     public function finish(Request $request)
     {
-        $empty = in_array($this->status, array(100, 101, 204, 205, 301, 302, 303, 304, 307));
-        $length = strlen($this->body);
-
-        if ($request->isHead() || $empty) {
-            $this->body = null;
+        if ($this->finished) {
+            throw new \LogicException("The response has already finished.");
         }
 
-        $this->headers->set("content-length", $length);
+        $this->request = $request;
 
-        if ($empty) {
-            $this->headers->delete("content-length");
-            $this->headers->delete("content-type");
-        }
+        $this->headers->set("content-length", strlen($this->body));
+        $this->setEmptyResponse();
 
-        if (headers_sent() === false) {
-            header("{$request->protocol} {$this->statuses[$this->status]}");
+        $this->writeHeaders();
+        $this->writeBody();
 
-            foreach ($this->headers->all() as $key => $value) {
-                header("{$key}: {$value}", false);
-            }
-        }
+        $this->finished = true;
 
-        echo($this->body);
+        return $this;
     }
 
     /**
@@ -256,5 +266,46 @@ class Response
         $suffix = gettype($appendix) . " given.";
 
         throw new \InvalidArgumentException("{$prefix}{$suffix}");
+    }
+
+    /** Protected functions. */
+
+    /**
+     * Set the correct behaviour for empty and no-body responses.
+     */
+    protected function setEmptyResponse()
+    {
+        $empty = in_array($this->status, $this->no_body);
+
+        if ($this->request->isHead() || $empty) {
+            $this->body = null;
+        }
+
+        if ($empty) {
+            $this->headers->delete("content-length");
+            $this->headers->delete("content-type");
+        }
+    }
+
+    /**
+     * Echo the response body.
+     */
+    protected function writeBody()
+    {
+        echo((string) $this->body);
+    }
+
+    /**
+     * Send response headers.
+     */
+    protected function writeHeaders()
+    {
+        if (headers_sent() === false) {
+            header("{$this->request->protocol} {$this->statuses[$this->status]}");
+
+            foreach ($this->headers->all() as $key => $value) {
+                header("{$key}: {$value}", false);
+            }
+        }
     }
 }

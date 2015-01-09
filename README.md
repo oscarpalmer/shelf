@@ -38,8 +38,8 @@ echo $request->path_info;
 use oscarpalmer\Shelf\Response;
 
 $response = new Response(
-    200,
     "Hello, world!",
+    200,
     array("Content-Type" => "text/plain")
 );
 
@@ -91,8 +91,8 @@ $request->isPut();               # Is it a put request?
 ```php
 # Constructor
 $response = new Response(
+    $body,                       # Response body; must be scalar or null.
     $status,                     # Response status code; must be integer.
-    $body,                       # Response body; must be scalar.
     $headers                     # Response headers; must be an array.
 );
 
