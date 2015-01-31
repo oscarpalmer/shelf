@@ -174,7 +174,7 @@ class Request
             $uri
         );
 
-        $this->path_info = $path;
+        $this->path_info = "/" . ltrim($path, "/");
     }
 
     /** Static functions. */
