@@ -48,26 +48,34 @@ class Request
     protected $server;
 
     /**
+     * @var Session Session class.
+     */
+    protected $session;
+
+    /**
      * Creates a new Request object from arrays of server, query, and request parameters.
      *
-     * @param array $server  Server parameters.
-     * @param array $query   Query parameters.
-     * @param array $data    Request parameters.
-     * @param array $cookies Cookie parameters.
-     * @param array $files   Files parameters.
+     * @param array       $server  Server parameters.
+     * @param array       $query   Query parameters.
+     * @param array       $data    Request parameters.
+     * @param array       $cookies Cookie parameters.
+     * @param array       $files   Files parameters.
+     * @param bool|string $session True to start session; string for named session.
      */
     public function __construct(
         array $server = array(),
         array $query = array(),
         array $data = array(),
         array $cookies = array(),
-        array $files = array()
+        array $files = array(),
+        $session = true
     ) {
         $this->cookies = new Blob($cookies);
         $this->data = new Blob($data);
         $this->files = new Blob($files);
         $this->query = new Blob($query);
         $this->server = new Blob($server);
+        $this->session = new Session($session);
 
         $this->protocol = $this->server->get("SERVER_PROTOCOL", "HTTP/1.1");
         $this->request_method = $this->server->get("REQUEST_METHOD", "GET");
@@ -182,10 +190,11 @@ class Request
     /**
      * Creates a new Request object based on superglobals.
      *
-     * @return Request A new Request object.
+     * @param  bool|string $session True to start session; string for named session.
+     * @return Request     A new Request object.
      */
-    public static function fromGlobals()
+    public static function fromGlobals($session = true)
     {
-        return new static($_SERVER, $_GET, $_POST, $_COOKIE, $_FILES);
+        return new static($_SERVER, $_GET, $_POST, $_COOKIE, $_FILES, $session);
     }
 }

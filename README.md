@@ -59,8 +59,15 @@ Shelf::VERSION;                  # Current Shelf version number.
 
 ```php
 # Constructor
-$request = new Request($s, $q, $d, $c, $f); # Server, query, data, cookie, and files parameters.
-Request::fromGlobals();                     # Static constructor for a superglobal Request object.
+$request = new Request(
+    $server,                     # Server parameters, like $_SERVER.
+    $query,                      # Query parameters, like $_GET.
+    $data,                       # Data parameters, like $_POST.
+    $cookie,                     # Cookie parameters, like $_COOKIE.
+    $files,                      # Files parameters, like $_FILES.
+    $session                     # True to start a session, or name of session to start.
+);
+Request::fromGlobals($session);  # Static constructor for a superglobal Request object.
 
 # Blobs
 # Check below for info on how to use Blobs
@@ -79,6 +86,7 @@ $request->request_method;        # Current request method.
 $request->server_admin           # you@your-email.com
 
 # Methods
+$request->isAjax();              # Is it an AJAX request?
 $request->isDelete();            # Is it a delete request?
 $request->isGet();               # Is it a get request?
 $request->isHead();              # Is it a head request?
@@ -114,25 +122,24 @@ $response->setStatus($status);   # Set the response status code; must be integer
 $response->write($appendix);     # Append content to the response body; must be scalar.
 ```
 
-### Blob
+### Blob & Session
 
-Blob is a container class for parameter storage.
+Blob is a container class for parameter storage. The Session class shares the same method names.
 
 ```php
 # Constructor
-$blob = new Blob($array);        # The parameter is optional and defaults to an empty array.
+$item = new Blob($array);        # The parameter is optional and defaults to an empty array.
+$session = new Session($var);    # True to start a session, or name of session to start;
+                                 # Request starts sessions, so you don't have to worry about
+                                 # this constructor as it'll abort if $_SESSION alredy exists.
 
 # Methods
-$blob->all();                    # Get the actual Blob array.
-$blob->delete("key");            # Delete item; returns Blob object for chaining.
-$blob->get("key", "default");    # Get Blob parameter by key with an optional default value.
-$blob->has("key");               # Check if key exists in Blob.
-$blob->set("key", "value");      # Set value for key; returns Blob object for chaining.
+$item->all();                    # Get the actual array of data.
+$item->delete("key");            # Delete item; returns Class object for chaining.
+$item->get("key", "default");    # Get Class data parameter by key with an optional default value.
+$item->has("key");               # Check if key exists in Class data.
+$item->set("key", "value");      # Set value for key; returns Class object for chaining.
 ```
-
-## Todo
-
-- Simple access to`$_SESSION`.
 
 ## License
 
