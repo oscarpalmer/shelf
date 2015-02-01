@@ -32,14 +32,23 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             $response = new Response("This won't be echoed.", $status);
             $response->finish(new Request);
             $this->expectOutputString("");
+            @session_destroy();
         }
+    }
 
+    public function testHeadResponse()
+    {
         # HEAD response.
         $response = new Response("This won't be echoed.");
         $response->finish(new Request(array("REQUEST_METHOD" => "HEAD")));
         $this->expectOutputString("");
+
+        session_destroy();
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testFinish()
     {
         $request = new Request;
@@ -54,6 +63,8 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         } catch (\Exception $e) {
             $this->assertInstanceOf("LogicException", $e);
         }
+
+        session_destroy();
     }
 
     public function testGetHeaders()
