@@ -5,13 +5,15 @@ namespace oscarpalmer\Shelf\Test;
 use oscarpalmer\Shelf\Request;
 use oscarpalmer\Shelf\Response;
 
-class ResponseTest extends \PHPUnit_Framework_TestCase
+class ResponseTest extends \PHPUnit\Framework\TestCase
 {
     protected $request;
     protected $response;
 
     public function setUp()
     {
+        $_SESSION = [];
+
         $this->response = new Response(
             "Test.",
             200,
@@ -28,11 +30,12 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testEmptyResponses()
     {
         # Informational, no-content, and not-modified responses.
-        foreach (array(100, 101, 204, 205, 301, 302, 303, 304, 307) as $status) {
+        foreach (array(100, 101, 204, 205, 301, 302, 303, 304, 307) as $status)
+        {
             $response = new Response("This won't be echoed.", $status);
             $response->finish(new Request);
+
             $this->expectOutputString("");
-            @session_destroy();
         }
     }
 
@@ -41,9 +44,8 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         # HEAD response.
         $response = new Response("This won't be echoed.");
         $response->finish(new Request(array("REQUEST_METHOD" => "HEAD")));
-        $this->expectOutputString("");
 
-        session_destroy();
+        $this->expectOutputString("");
     }
 
     /**
@@ -63,8 +65,6 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         } catch (\Exception $e) {
             $this->assertInstanceOf("LogicException", $e);
         }
-
-        session_destroy();
     }
 
     public function testGetHeaders()

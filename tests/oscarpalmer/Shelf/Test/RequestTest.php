@@ -4,7 +4,7 @@ namespace oscarpalmer\Shelf\Test;
 
 use oscarpalmer\Shelf\Request;
 
-class RequestTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends \PHPUnit\Framework\TestCase
 {
     # Mock AJAX request.
     protected $ajax;
@@ -14,6 +14,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $_SESSION = [];
+
         $array = array(
             "REQUEST_METHOD" => "GET",
             "REQUEST_URI" => "/path",
@@ -30,17 +32,17 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testConstructor()
     {
         $request = new Request($this->request);
+
         $this->assertNotNull($request);
         $this->assertInstanceOf("oscarpalmer\Shelf\Request", $request);
-        session_destroy();
     }
 
     public function testFromGlobals()
     {
         $superGlobalRequest = Request::fromGlobals();
+
         $this->assertNotNull($superGlobalRequest);
         $this->assertInstanceOf("oscarpalmer\Shelf\Request", $superGlobalRequest);
-        session_destroy();
     }
 
     /**
@@ -65,24 +67,21 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertSame("/path", $request->path_info);
         $this->assertSame("HTTP/1.0", $request->protocol);
         $this->assertSame("GET", $request->request_method);
-
         $this->assertNull($request->server_admin);
-
-        session_destroy();
     }
 
     public function testIsAjax()
     {
         $ajax = new Request($this->ajax);
+
         $this->assertTrue($ajax->isAjax());
-        session_destroy();
     }
 
     public function testIsNotAjax()
     {
         $request = new Request($this->request);
+
         $this->assertFalse($request->isAjax());
-        session_destroy();
     }
 
     public function testIsVerb()
@@ -94,7 +93,5 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($request->isHead());
         $this->assertFalse($request->isPost());
         $this->assertFalse($request->isPut());
-
-        session_destroy();
     }
 }

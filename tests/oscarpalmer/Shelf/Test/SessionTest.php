@@ -5,23 +5,29 @@ namespace oscarpalmer\Shelf\Test;
 use oscarpalmer\Shelf\Request;
 use oscarpalmer\Shelf\Session;
 
-class SessionTest extends \PHPUnit_Framework_TestCase
+class SessionTest extends \PHPUnit\Framework\TestCase
 {
+    public function setup()
+    {
+        $_SESSION = [];
+    }
+
     public function testConstructor()
     {
         $session = new Session(true);
 
         $this->assertInstanceOf("oscarpalmer\Shelf\Session", $session);
-
-        session_destroy();
     }
 
     public function testAll()
     {
         $session = new Session(true);
+
         $this->assertEmpty($session->all());
 
-        session_destroy();
+        unset($_SESSION);
+
+        $this->assertEmpty($session->all());
     }
 
     public function testBadSession()
@@ -48,39 +54,31 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $session->delete("key");
 
         $this->assertNull($session->get("key"));
-
-        session_destroy();
     }
 
     public function testMultipleSessions()
     {
         $session_one = new Session(true);
+        $session_two = new Session(true);
 
-        try {
-            $session_two = new Session(true);
-        } catch (\Exception $e) {
-            $this->assertInstanceOf("PHPUnit_Framework_Error_Notice", $e);
-        }
-
-        session_destroy();
+        $this->assertEquals($session_one, $session_two);
     }
 
     public function testNamedSession()
     {
+        unset($_SESSION);
+
         $session = new Session("my_session");
 
         $this->assertInstanceOf("oscarpalmer\Shelf\Session", $session);
-
         $this->assertEmpty($session->all());
-
-        session_destroy();
     }
 
     public function testNoSession()
     {
         $session = new Session(false);
-        $this->assertInstanceOf("oscarpalmer\Shelf\Session", $session);
 
-        $this->assertNull($session->all());
+        $this->assertInstanceOf("oscarpalmer\Shelf\Session", $session);
+        $this->assertEmpty($session->all());
     }
 }

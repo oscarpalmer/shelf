@@ -4,7 +4,7 @@ namespace oscarpalmer\Shelf\Test;
 
 use oscarpalmer\Shelf\Blob;
 
-class BlobTest extends \PHPUnit_Framework_TestCase
+class BlobTest extends \PHPUnit\Framework\TestCase
 {
     # Mock Blob.
     protected $blob;
