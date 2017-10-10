@@ -11,7 +11,7 @@
     }
   },
   "description": "A Rack-like interface.",
-  "homepage": "http://git.io/shelf",
+  "homepage": "https://github.com/oscarpalmer/shelf",
   "keywords": [
     "framework",
     "http"
@@ -19,10 +19,11 @@
   "license": "MIT",
   "name": "oscarpalmer/shelf",
   "require": {
-    "php": ">=5.3.0"
+    "php": ">=7.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "~4.0"
+    "phpunit/php-code-coverage": ">=5.2",
+    "phpunit/phpunit": ">=6.4"
   },
   "type": "library"
 }

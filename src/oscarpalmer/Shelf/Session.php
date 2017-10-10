@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace oscarpalmer\Shelf;
 
 class Session
@@ -21,13 +23,13 @@ class Session
      *
      * @return array $_SESSION array.
      */
-    public function all()
+    public function all(): array
     {
         if (isset($_SESSION)) {
             return $_SESSION;
         }
 
-        return null;
+        return [];
     }
 
     /**
@@ -67,7 +69,7 @@ class Session
      * @param  mixed $key Key to look for.
      * @return bool  True if found.
      */
-    public function has($key)
+    public function has($key): bool
     {
         return array_key_exists($key, $_SESSION);
     }
@@ -79,7 +81,7 @@ class Session
      * @param  mixed   $value Value for key.
      * @return Session Session object for optional chaining.
      */
-    public function set($key, $value)
+    public function set($key, $value): Session
     {
         $_SESSION[$key] = $value;
 

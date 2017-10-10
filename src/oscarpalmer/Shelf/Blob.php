@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace oscarpalmer\Shelf;
 
 /**
@@ -10,7 +12,7 @@ class Blob
     /**
      * @var array $blob Parameter storage.
      */
-    protected $blob;
+    protected $blob = null;
 
     /**
      * Store an array as a Blob.
@@ -29,7 +31,7 @@ class Blob
      *
      * @return array Blob array.
      */
-    public function all()
+    public function all(): array
     {
         return $this->blob;
     }
@@ -40,7 +42,7 @@ class Blob
      * @param  mixed $key Key to delete.
      * @return Blob  Blob object for optional chaining.
      */
-    public function delete($key)
+    public function delete($key): Blob
     {
         if (array_key_exists($key, $this->blob)) {
             unset($this->blob[$key]);
@@ -71,7 +73,7 @@ class Blob
      * @param  mixed $key Key to look for.
      * @return bool  True if found.
      */
-    public function has($key)
+    public function has($key): bool
     {
         return array_key_exists($key, $this->blob);
     }
@@ -83,7 +85,7 @@ class Blob
      * @param  mixed $value Value for key.
      * @return Blob  Blob object for optional chaining.
      */
-    public function set($key, $value)
+    public function set($key, $value): Blob
     {
         $this->blob[$key] = $value;
 

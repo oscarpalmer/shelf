@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace oscarpalmer\Shelf;
 
 /**
@@ -10,47 +12,47 @@ class Request
     /**
      * @var Blob Cookie parameters.
      */
-    protected $cookies;
+    protected $cookies = null;
 
     /**
      * @var Blob Request parameters.
      */
-    protected $data;
+    protected $data = null;
 
     /**
      * @var Blob Files parameters.
      */
-    protected $files;
+    protected $files = null;
 
     /**
      * @var string Current path.
      */
-    protected $path_info;
+    protected $path_info = null;
 
     /**
      * @var string Current protocol.
      */
-    protected $protocol;
+    protected $protocol = null;
 
     /**
      * @var Blob Query parameters.
      */
-    protected $query;
+    protected $query = null;
 
     /**
      * @var string Current request method.
      */
-    protected $request_method;
+    protected $request_method = null;
 
     /**
      * @var Blob Server parameters.
      */
-    protected $server;
+    protected $server = null;
 
     /**
      * @var Session Session class.
      */
-    protected $session;
+    protected $session = null;
 
     /**
      * Creates a new Request object from arrays of server, query, and request parameters.
@@ -89,7 +91,7 @@ class Request
      * @param  string $key Key for parameter.
      * @return mixed  Value for parameter.
      */
-    public function __get($key)
+    public function __get(string $key)
     {
         # Prioritise parameters created by Shelf.
         if (isset($this->$key)) {
@@ -106,7 +108,7 @@ class Request
      *
      * @return bool True if requested via AJAX.
      */
-    public function isAjax()
+    public function isAjax(): bool
     {
         return $this->server->get("HTTP_X_REQUESTED_WITH") === "XMLHttpRequest";
     }
@@ -116,7 +118,7 @@ class Request
      *
      * @return bool True if request method is DELETE.
      */
-    public function isDelete()
+    public function isDelete(): bool
     {
         return $this->request_method === "DELETE";
     }
@@ -126,7 +128,7 @@ class Request
      *
      * @return bool True if request method is GET.
      */
-    public function isGet()
+    public function isGet(): bool
     {
         return $this->request_method === "GET";
     }
@@ -136,7 +138,7 @@ class Request
      *
      * @return bool True if request method is HEAD.
      */
-    public function isHead()
+    public function isHead(): bool
     {
         return $this->request_method === "HEAD";
     }
@@ -146,7 +148,7 @@ class Request
      *
      * @return bool True if request method is POST.
      */
-    public function isPost()
+    public function isPost(): bool
     {
         return $this->request_method === "POST";
     }
@@ -156,7 +158,7 @@ class Request
      *
      * @return bool True if request method is PUT.
      */
-    public function isPut()
+    public function isPut(): bool
     {
         return $this->request_method === "PUT";
     }
@@ -193,7 +195,7 @@ class Request
      * @param  bool|string $session True to start session; string for named session.
      * @return Request     A new Request object.
      */
-    public static function fromGlobals($session = true)
+    public static function fromGlobals($session = true): Request
     {
         return new static($_SERVER, $_GET, $_POST, $_COOKIE, $_FILES, $session);
     }
