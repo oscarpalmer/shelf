@@ -8,7 +8,7 @@ Shelf is a [Rack](//rack.github.io)-like interface for PHP `>=7`.
 
 ### Installation
 
-Shelf is available via Composer.
+Shelf is available via [Composer & Packagist](//packagist.org/packages/oscarpalmer/shelf).
 
 ```json
 {
@@ -52,7 +52,7 @@ $response->finish($request);
 
 ```php
 # Constants
-Shelf::VERSION;                  # Current Shelf version number.
+Shelf::VERSION;                  # Current Shelf version number
 ```
 
 ### Request
@@ -60,27 +60,27 @@ Shelf::VERSION;                  # Current Shelf version number.
 ```php
 # Constructor
 $request = new Request(
-    $server,                     # Server parameters, like $_SERVER.
-    $query,                      # Query parameters, like $_GET.
-    $data,                       # Data parameters, like $_POST.
-    $cookie,                     # Cookie parameters, like $_COOKIE.
-    $files,                      # Files parameters, like $_FILES.
-    $session                     # True to start a session, or name of session to start.
+    $server,                     # Server parameters, like $_SERVER
+    $query,                      # Query parameters, like $_GET
+    $data,                       # Data parameters, like $_POST
+    $cookie,                     # Cookie parameters, like $_COOKIE
+    $files,                      # Files parameters, like $_FILES
+    $session                     # True to start a session, or name of session to start
 );
 Request::fromGlobals($session);  # Static constructor for a superglobal Request object.
 
 # Blobs
 # Check below for info on how to use Blobs
-$request->cookies;               # A Blob of cookies (~$_COOKIE) parameters.
-$request->data;                  # A Blob of request (~$_POST) parameters.
-$request->files;                 # A Blob of files (~$_FILES) parameters.
-$request->query;                 # A Blob of query (~$_GET) parameters.
-$request->server;                # A Blob of server (~$_SERVER) parameters.
+$request->cookies;               # A Blob of cookies (~$_COOKIE) parameters
+$request->data;                  # A Blob of request (~$_POST) parameters
+$request->files;                 # A Blob of files (~$_FILES) parameters
+$request->query;                 # A Blob of query (~$_GET) parameters
+$request->server;                # A Blob of server (~$_SERVER) parameters
 
 # Variables
-$request->path_info;             # Current path.
-$request->protocol;              # Current protocol.
-$request->request_method;        # Current request method.
+$request->path_info;             # Current path
+$request->protocol;              # Current protocol
+$request->request_method;        # Current request method
 
 # You can also access other server variables, e.g.:
 $request->server_admin           # you@your-email.com
@@ -99,46 +99,46 @@ $request->isPut();               # Is it a put request?
 ```php
 # Constructor
 $response = new Response(
-    $body,                       # Response body; must be scalar or null.
-    $status,                     # Response status code; must be integer.
-    $headers                     # Response headers; must be an array.
+    $body,                       # Response body; must be scalar or null
+    $status,                     # Response status code; must be integer
+    $headers                     # Response headers; must be an array
 );
 
 # Methods
-$response->finish($request);     # Sets the response headers and echoes the response body.
-                                 # The parameter must be a Shelf Request object.
+$response->finish($request);     # Sets the response headers and echoes the response body
+                                 # The parameter must be a Shelf Request object
 
 # Getters
-$response->getBody();            # Returns the current response body.
-$response->getHeader($name);     # Returns a response header by name.
-$response->getHeaders();         # Returns all response headers.
-$response->getStatus();          # Returns the current response status code.
-$response->getStatusMessage();   # Returns the current response status message.
+$response->getBody();            # Returns the current response body
+$response->getHeader($name);     # Returns a response header by name
+$response->getHeaders();         # Returns all response headers
+$response->getStatus();          # Returns the current response status code
+$response->getStatusMessage();   # Returns the current response status message
 
 # Setters
-$response->setBody($body);       # Set the response body; must be scalar.
-$response->setHeader($k, $v);    # Set a new response header; both key and value must be strings.
-$response->setStatus($status);   # Set the response status code; must be integer.
-$response->write($appendix);     # Append content to the response body; must be scalar.
+$response->setBody($body);       # Set the response body; must be scalar or null
+$response->setHeader($k, $v);    # Set a new response header; both key and value must be strings
+$response->setStatus($status);   # Set the response status code; must be integer
+$response->write($appendix);     # Append content to the response body; must be scalar or null
 ```
 
 ### Blob & Session
 
-Blob is a container class for parameter storage. The Session class shares the same method names.
+Blob is a container class for parameter storage. The Session class shares the same method names
 
 ```php
 # Constructor
-$item = new Blob($array);        # The parameter is optional and defaults to an empty array.
+$item = new Blob($array);        # The parameter is optional and defaults to an empty array
 $session = new Session($var);    # True to start a session, or name of session to start;
                                  # Request starts sessions, so you don't have to worry about
-                                 # this constructor as it'll abort if $_SESSION alredy exists.
+                                 # this constructor as it'll abort if $_SESSION alredy exists
 
 # Methods
-$item->all();                    # Get the actual array of data.
-$item->delete("key");            # Delete item; returns Class object for chaining.
-$item->get("key", "default");    # Get Class data parameter by key with an optional default value.
-$item->has("key");               # Check if key exists in Class data.
-$item->set("key", "value");      # Set value for key; returns Class object for chaining.
+$item->all();                    # Get the actual array of data
+$item->delete("key");            # Delete item; returns Class object for chaining
+$item->get("key", "default");    # Get Class data parameter by key with an optional default value
+$item->has("key");               # Check if key exists in Class data
+$item->set("key", "value");      # Set value for key; returns Class object for chaining
 ```
 
 ## License

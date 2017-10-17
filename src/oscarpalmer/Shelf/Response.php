@@ -100,7 +100,7 @@ class Response
      * @param array       $headers Response headers.
      */
     public function __construct(
-        string $body = "",
+        $body = "",
         int $status = 200,
         array $headers = array("content-type" => "text/html; charset=utf-8")
     ) {
