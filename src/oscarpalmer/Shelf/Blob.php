@@ -19,7 +19,7 @@ class Blob
      *
      * @param array $blob Array to store.
      */
-    public function __construct(array $blob = array())
+    public function __construct(array $blob = [])
     {
         $this->blob = $blob;
     }

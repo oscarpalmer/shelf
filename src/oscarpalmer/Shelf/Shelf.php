@@ -10,5 +10,5 @@ class Shelf
     /**
      * @var string Current version number.
      */
-    const VERSION = "1.5.0";
+    const VERSION = "1.5.2";
 }

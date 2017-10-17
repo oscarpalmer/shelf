@@ -65,11 +65,11 @@ class Request
      * @param bool|string $session True to start session; string for named session.
      */
     public function __construct(
-        array $server = array(),
-        array $query = array(),
-        array $data = array(),
-        array $cookies = array(),
-        array $files = array(),
+        array $server = [],
+        array $query = [],
+        array $data = [],
+        array $cookies = [],
+        array $files = [],
         $session = true
     ) {
         $this->cookies = new Blob($cookies);
@@ -175,14 +175,13 @@ class Request
         $uri = $this->server->get("REQUEST_URI", "/");
 
         $path = preg_replace(
-            array(
+            [
                 "/\A" . preg_quote($script, "/") . "/",
                 "/\A" . preg_quote(dirname($script), "/") . "/",
-                "/\?" . preg_quote($query, "/") . "\z/",
-            ),
+                "/\?" . preg_quote($query, "/") . "\z/"
+            ],
             "",
-            $uri
-        );
+            $uri);
 
         $this->path_info = "/" . ltrim($path, "/");
     }

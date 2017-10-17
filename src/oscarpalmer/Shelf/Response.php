@@ -37,15 +37,16 @@ class Response
     /**
      * @var array Status codes for no-body responses.
      */
-    protected $no_body = array(100, 101, 204, 205, 301, 302, 303, 304, 307);
+    protected $no_body = [100, 101, 204, 205, 301, 302, 303, 304, 307];
 
     /**
      * @var array Response status messages.
      */
-    protected $statuses = array(
+    protected $statuses = [
         # Informational
         100 => "100 Continue",
         101 => "101 Switching Protocols",
+
         # Success!
         200 => "200 OK",
         201 => "201 Created",
@@ -54,6 +55,7 @@ class Response
         204 => "204 No Content",
         205 => "205 Reset Content",
         206 => "206 Partial Content",
+
         # Redirection.
         300 => "300 Multiple Choices",
         301 => "301 Moved Permanently",
@@ -63,6 +65,7 @@ class Response
         305 => "305 Use Proxy",
         306 => "306 Unused",
         307 => "307 Temporary Redirect",
+
         # Client errors.
         400 => "400 Bad Request",
         401 => "401 Unauthorized",
@@ -82,6 +85,7 @@ class Response
         415 => "415 Unsupported Media Type",
         416 => "416 Requested Range Not Satisfiable",
         417 => "417 Expectation Failed",
+
         # Server errors.
         500 => "500 Internal Server Error",
         501 => "501 Not Implemented",
@@ -89,7 +93,7 @@ class Response
         503 => "503 Service Unavailable",
         504 => "504 Gateway Timeout",
         505 => "505 HTTP Version Not Supported"
-    );
+    ];
 
     /**
      * Creates a new Response object;
@@ -102,7 +106,7 @@ class Response
     public function __construct(
         $body = "",
         int $status = 200,
-        array $headers = array("content-type" => "text/html; charset=utf-8")
+        array $headers = ["content-type" => "text/html; charset=utf-8"]
     ) {
         $this->setStatus($status);
         $this->setBody($body);
