@@ -130,12 +130,6 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         } catch (\Exception $e) {
             $this->assertInstanceOf("LogicException", $e);
         }
-
-        try {
-            $response->setStatus(null);
-        } catch (\Exception $e) {
-            $this->assertInstanceOf("InvalidArgumentException", $e);
-        }
     }
 
     public function testWrite()

@@ -31,7 +31,7 @@ class Blob
      *
      * @return array Blob array.
      */
-    public function all(): array
+    public function all() : array
     {
         return $this->blob;
     }
@@ -42,7 +42,7 @@ class Blob
      * @param  mixed $key Key to delete.
      * @return Blob  Blob object for optional chaining.
      */
-    public function delete($key): Blob
+    public function delete($key) : Blob
     {
         if (array_key_exists($key, $this->blob)) {
             unset($this->blob[$key]);
@@ -73,7 +73,7 @@ class Blob
      * @param  mixed $key Key to look for.
      * @return bool  True if found.
      */
-    public function has($key): bool
+    public function has($key) : bool
     {
         return array_key_exists($key, $this->blob);
     }
@@ -85,7 +85,7 @@ class Blob
      * @param  mixed $value Value for key.
      * @return Blob  Blob object for optional chaining.
      */
-    public function set($key, $value): Blob
+    public function set($key, $value) : Blob
     {
         $this->blob[$key] = $value;
 

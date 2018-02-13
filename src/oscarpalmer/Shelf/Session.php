@@ -23,7 +23,7 @@ class Session
      *
      * @return array $_SESSION array.
      */
-    public function all(): array
+    public function all() : array
     {
         if (isset($_SESSION)) {
             return $_SESSION;
@@ -38,7 +38,7 @@ class Session
      * @param  mixed   $key Key to delete.
      * @return Session Session object for optional chaining.
      */
-    public function delete($key)
+    public function delete($key) : Session
     {
         if (array_key_exists($key, $_SESSION)) {
             unset($_SESSION[$key]);
@@ -69,7 +69,7 @@ class Session
      * @param  mixed $key Key to look for.
      * @return bool  True if found.
      */
-    public function has($key): bool
+    public function has($key) : bool
     {
         return array_key_exists($key, $_SESSION);
     }
@@ -81,7 +81,7 @@ class Session
      * @param  mixed   $value Value for key.
      * @return Session Session object for optional chaining.
      */
-    public function set($key, $value): Session
+    public function set($key, $value) : Session
     {
         $_SESSION[$key] = $value;
 

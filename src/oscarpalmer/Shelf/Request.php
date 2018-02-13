@@ -70,7 +70,7 @@ class Request
         array $data = [],
         array $cookies = [],
         array $files = [],
-        $session = true
+        bool $session = true
     ) {
         $this->cookies = new Blob($cookies);
         $this->data = new Blob($data);
@@ -108,7 +108,7 @@ class Request
      *
      * @return bool True if requested via AJAX.
      */
-    public function isAjax(): bool
+    public function isAjax() : bool
     {
         return $this->server->get("HTTP_X_REQUESTED_WITH") === "XMLHttpRequest";
     }
@@ -118,7 +118,7 @@ class Request
      *
      * @return bool True if request method is DELETE.
      */
-    public function isDelete(): bool
+    public function isDelete() : bool
     {
         return $this->request_method === "DELETE";
     }
@@ -128,7 +128,7 @@ class Request
      *
      * @return bool True if request method is GET.
      */
-    public function isGet(): bool
+    public function isGet() : bool
     {
         return $this->request_method === "GET";
     }
@@ -138,7 +138,7 @@ class Request
      *
      * @return bool True if request method is HEAD.
      */
-    public function isHead(): bool
+    public function isHead() : bool
     {
         return $this->request_method === "HEAD";
     }
@@ -148,7 +148,7 @@ class Request
      *
      * @return bool True if request method is POST.
      */
-    public function isPost(): bool
+    public function isPost() : bool
     {
         return $this->request_method === "POST";
     }
@@ -158,7 +158,7 @@ class Request
      *
      * @return bool True if request method is PUT.
      */
-    public function isPut(): bool
+    public function isPut() : bool
     {
         return $this->request_method === "PUT";
     }
@@ -194,7 +194,7 @@ class Request
      * @param  bool|string $session True to start session; string for named session.
      * @return Request     A new Request object.
      */
-    public static function fromGlobals($session = true): Request
+    public static function fromGlobals(bool $session = true) : Request
     {
         return new static($_SERVER, $_GET, $_POST, $_COOKIE, $_FILES, $session);
     }

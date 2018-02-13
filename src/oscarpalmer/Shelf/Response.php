@@ -122,7 +122,7 @@ class Response
      * @param  Request  Request object used create a nice response.
      * @return Response The Response object.
      */
-    public function finish(Request $request): Response
+    public function finish(Request $request) : Response
     {
         if ($this->finished) {
             throw new \LogicException("The response has already finished.");
@@ -146,7 +146,7 @@ class Response
      *
      * @return string Response body.
      */
-    public function getBody(): string
+    public function getBody() : string
     {
         return $this->body;
     }
@@ -167,7 +167,7 @@ class Response
      *
      * @return array Response headers.
      */
-    public function getHeaders(): array
+    public function getHeaders() : array
     {
         return $this->headers->all();
     }
@@ -177,7 +177,7 @@ class Response
      *
      * @return int Response status code.
      */
-    public function getStatus(): int
+    public function getStatus() : int
     {
         return $this->status;
     }
@@ -187,7 +187,7 @@ class Response
      *
      * @return string Response status message.
      */
-    public function getStatusMessage(): string
+    public function getStatusMessage() : string
     {
         return $this->statuses[$this->status];
     }
@@ -198,7 +198,7 @@ class Response
      * @param  null|scalar $body Scalar value to set.
      * @return Response    Response object for optional chaining.
      */
-    public function setBody($body): Response
+    public function setBody($body) : Response
     {
         if (is_null($body) || is_scalar($body)) {
             $this->body = (string) $body;
@@ -219,7 +219,7 @@ class Response
      * @param  string   $value Value for header.
      * @return Response Response object for optional chaining.
      */
-    public function setHeader($key, $value): Response
+    public function setHeader($key, $value) : Response
     {
         if (is_string($key) && is_string($value)) {
             $this->headers->set($key, $value);
@@ -239,19 +239,15 @@ class Response
      * @param  int      $status Integer value to set.
      * @return Response Response object for optional chaining.
      */
-    public function setStatus($status): Response
+    public function setStatus(int $status) : Response
     {
-        if (is_int($status) && in_array($status, $this->statuses)) {
+        if (in_array($status, $this->statuses)) {
             $this->status = $status;
 
             return $this;
         }
 
-        if (is_int($status)) {
-            throw new \LogicException("Status code must be a valid status code, but {$status} isn't.");
-        }
-
-        throw new \InvalidArgumentException("Status code must be integer, " . gettype($status) . " given.");
+        throw new \LogicException("Status code must be a valid status code, but {$status} isn't.");
     }
 
     /**
@@ -260,7 +256,7 @@ class Response
      * @param  null|scalar $appendix Content to append.
      * @return Response    Response object for optional chaining.
      */
-    public function write($appendix): Response
+    public function write($appendix) : Response
     {
         if (is_null($appendix) || is_scalar($appendix)) {
             $this->body .= (string) $appendix;
