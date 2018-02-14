@@ -27,7 +27,7 @@ Here are two small examples to get you up and running in ~ten seconds. Please co
 ```php
 use oscarpalmer\Shelf\Request;
 
-$request = new Request($server);
+$request = new Request($server); # Or new Request::fromGlobals();
 
 echo $request->path_info;
 ```

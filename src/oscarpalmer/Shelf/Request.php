@@ -70,7 +70,7 @@ class Request
         array $data = [],
         array $cookies = [],
         array $files = [],
-        bool $session = true
+        $session = true
     ) {
         $this->cookies = new Blob($cookies);
         $this->data = new Blob($data);
@@ -194,7 +194,7 @@ class Request
      * @param  bool|string $session True to start session; string for named session.
      * @return Request     A new Request object.
      */
-    public static function fromGlobals(bool $session = true) : Request
+    public static function fromGlobals($session = true) : Request
     {
         return new static($_SERVER, $_GET, $_POST, $_COOKIE, $_FILES, $session);
     }
