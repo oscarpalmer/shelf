@@ -13,7 +13,7 @@ Shelf is available via [Composer & Packagist](//packagist.org/packages/oscarpalm
 ```json
 {
   "require": {
-    "oscarpalmer/shelf": "2.1.*"
+    "oscarpalmer/shelf": "2.2.*"
   }
 }
 ```
@@ -124,7 +124,7 @@ $response->write($appendix);     # Append content to the response body; must be 
 
 ### Blob & Session
 
-Blob is a container class for parameter storage. The Session class shares the same method names
+Blob is a container class for parameter storage. The Session class shares the same method names.
 
 ```php
 # Constructor
