@@ -106,12 +106,6 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
         $response->setHeader("Content-Type", "text/html");
         $this->assertSame("text/html", $response->getHeader("Content-Type"));
-
-        try {
-            $response->setHeader(null, array());
-        } catch (\Exception $e) {
-            $this->assertInstanceOf("InvalidArgumentException", $e);
-        }
     }
 
     public function testGetAndSetStatus()

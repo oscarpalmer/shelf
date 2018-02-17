@@ -157,7 +157,7 @@ class Response
      * @param  string $key Key for header.
      * @return mixed  Found header or null.
      */
-    public function getHeader($key)
+    public function getHeader(string $key)
     {
         return $this->headers->get($key);
     }
@@ -216,21 +216,14 @@ class Response
      * Set a response header.
      *
      * @param  string   $key   Key for header.
-     * @param  string   $value Value for header.
+     * @param  mixed    $value Value for header.
      * @return Response Response object for optional chaining.
      */
-    public function setHeader($key, $value) : Response
+    public function setHeader(string $key, $value) : Response
     {
-        if (is_string($key) && is_string($value)) {
-            $this->headers->set($key, $value);
+        $this->headers->set($key, $value);
 
-            return $this;
-        }
-
-        $name = is_string($key) ? "Value" : "Key";
-        $type = gettype(is_string($key) ? $value : $key);
-
-        throw new \InvalidArgumentException("{$name} must be string, {$type} given.");
+        return $this;
     }
 
     /**
@@ -247,7 +240,7 @@ class Response
             return $this;
         }
 
-        throw new \LogicException("Status code must be a valid status code, but {$status} isn't.");
+        throw new \LogicException("Status code must be a valid status code, but {$status} is not.");
     }
 
     /**

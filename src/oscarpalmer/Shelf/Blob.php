@@ -7,25 +7,8 @@ namespace oscarpalmer\Shelf;
 /**
  * Blob; a container class.
  */
-class Blob
+class Blob extends \ArrayObject
 {
-    /**
-     * @var array $blob Parameter storage.
-     */
-    protected $blob = null;
-
-    /**
-     * Store an array as a Blob.
-     *
-     * @param array $blob Array to store.
-     */
-    public function __construct(array $blob = [])
-    {
-        $this->blob = $blob;
-    }
-
-    /** Public functions. */
-
     /**
      * Get the actual Blob array.
      *
@@ -33,7 +16,7 @@ class Blob
      */
     public function all() : array
     {
-        return $this->blob;
+        return $this->getArrayCopy();
     }
 
     /**
@@ -44,8 +27,8 @@ class Blob
      */
     public function delete($key) : Blob
     {
-        if (array_key_exists($key, $this->blob)) {
-            unset($this->blob[$key]);
+        if ($this->offsetExists($key)) {
+            $this->offsetUnset($key);
         }
 
         return $this;
@@ -54,14 +37,14 @@ class Blob
     /**
      * Get the value for a specific key.
      *
-     * @param  mixed $key     Key to look for.
-     * @param  mixed $default Default value.
-     * @return mixed Found or default value.
+     * @param  string $key     Key to look for.
+     * @param  mixed  $default Default value.
+     * @return mixed  Found or default value.
      */
-    public function get($key, $default = null)
+    public function get(string $key, $default = null)
     {
-        if (array_key_exists($key, $this->blob)) {
-            return $this->blob[$key];
+        if ($this->offsetExists($key)) {
+            return $this->offsetGet($key);
         }
 
         return $default;
@@ -75,19 +58,19 @@ class Blob
      */
     public function has($key) : bool
     {
-        return array_key_exists($key, $this->blob);
+        return $this->offsetExists($key);
     }
 
     /**
      * Set value for key in Blob.
      *
-     * @param  mixed $key   Key to set.
-     * @param  mixed $value Value for key.
-     * @return Blob  Blob object for optional chaining.
+     * @param  string $key   Key to set.
+     * @param  mixed  $value Value for key.
+     * @return Blob   Blob object for optional chaining.
      */
-    public function set($key, $value) : Blob
+    public function set(string $key, $value) : Blob
     {
-        $this->blob[$key] = $value;
+        $this->offsetSet($key, $value);
 
         return $this;
     }
