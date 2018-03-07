@@ -8,6 +8,6 @@ class ShelfTest extends \PHPUnit\Framework\TestCase
 {
     public function testVersion()
     {
-        $this->assertInternalType("string", Shelf::VERSION);
+        $this->assertInternalType('string', Shelf::VERSION);
     }
 }

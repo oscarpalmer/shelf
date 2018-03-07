@@ -11,17 +11,17 @@ class BlobTest extends \PHPUnit\Framework\TestCase
 
     public function setUp()
     {
-        $this->blob = new Blob(array(
-            0 => "alpha",
-            1 => "beta",
-            "key" => "value"
-        ));
+        $this->blob = new Blob([
+            0 => 'alpha',
+            1 => 'beta',
+            'key' => 'value'
+        ]);
     }
 
     public function testConstructor()
     {
         $this->assertNotNull($this->blob);
-        $this->assertInstanceOf("oscarpalmer\Shelf\Blob", $this->blob);
+        $this->assertInstanceOf('oscarpalmer\Shelf\Blob', $this->blob);
     }
 
     public function testDelete()
@@ -35,8 +35,8 @@ class BlobTest extends \PHPUnit\Framework\TestCase
 
     public function testGet()
     {
-        $this->assertSame("value", $this->blob->get("key"));
-        $this->assertSame("default", $this->blob->get("this-key-doesnt-exist", "default"));
+        $this->assertSame('value', $this->blob->get('key'));
+        $this->assertSame('default', $this->blob->get('this-key-doesnt-exist', 'default'));
 
         $this->assertCount(3, $this->blob->all());
     }
@@ -44,6 +44,6 @@ class BlobTest extends \PHPUnit\Framework\TestCase
     public function testHas()
     {
         $this->assertTrue($this->blob->has(0));
-        $this->assertFalse($this->blob->has("this-key-doesnt-exist"));
+        $this->assertFalse($this->blob->has('this-key-doesnt-exist'));
     }
 }

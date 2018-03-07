@@ -16,15 +16,15 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     {
         $_SESSION = [];
 
-        $array = array(
-            "REQUEST_METHOD" => "GET",
-            "REQUEST_URI" => "/path",
-            "SERVER_PROTOCOL" => "HTTP/1.0"
-        );
+        $array = [
+            'REQUEST_METHOD' => 'GET',
+            'REQUEST_URI' => '/path',
+            'SERVER_PROTOCOL' => 'HTTP/1.0'
+        ];
 
         $this->request = $array;
 
-        $array["HTTP_X_REQUESTED_WITH"] = "XMLHttpRequest";
+        $array['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
 
         $this->ajax = $array;
     }
@@ -34,7 +34,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $request = new Request($this->request);
 
         $this->assertNotNull($request);
-        $this->assertInstanceOf("oscarpalmer\Shelf\Request", $request);
+        $this->assertInstanceOf('oscarpalmer\Shelf\Request', $request);
     }
 
     public function testFromGlobals()
@@ -42,7 +42,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $superGlobalRequest = Request::fromGlobals();
 
         $this->assertNotNull($superGlobalRequest);
-        $this->assertInstanceOf("oscarpalmer\Shelf\Request", $superGlobalRequest);
+        $this->assertInstanceOf('oscarpalmer\Shelf\Request', $superGlobalRequest);
     }
 
     /**
@@ -53,20 +53,22 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     {
         $request = new Request($this->request);
 
-        foreach (array(
-            $request->cookies,
+        foreach ([
             $request->data,
             $request->files,
             $request->query,
             $request->server
-        ) as $blob) {
+        ] as $blob) {
             $this->assertNotNull($blob);
-            $this->assertInstanceOf("oscarpalmer\Shelf\Blob", $blob);
+            $this->assertInstanceOf('oscarpalmer\Shelf\Blob', $blob);
         }
+        
+        $this->assertInstanceOf('oscarpalmer\Shelf\Cookies', $request->cookies);
+        $this->assertInstanceOf('oscarpalmer\Shelf\Session', $request->session);
 
-        $this->assertSame("/path", $request->path_info);
-        $this->assertSame("HTTP/1.0", $request->protocol);
-        $this->assertSame("GET", $request->request_method);
+        $this->assertSame('/path', $request->path_info);
+        $this->assertSame('HTTP/1.0', $request->protocol);
+        $this->assertSame('GET', $request->request_method);
         $this->assertNull($request->server_admin);
     }
 

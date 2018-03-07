@@ -10,6 +10,67 @@ namespace oscarpalmer\Shelf;
 class Response
 {
     /**
+     * @var array Status codes for no-body responses.
+     */
+    const NO_BODY_STATUSES = [100, 101, 204, 205, 301, 302, 303, 304, 307];
+
+    /**
+     * @var array Response status messages.
+     */
+    const RESPONSE_STATUSES = [
+        # Informational
+        100 => '100 Continue',
+        101 => '101 Switching Protocols',
+
+        # Success!
+        200 => '200 OK',
+        201 => '201 Created',
+        202 => '202 Accepted',
+        203 => '203 Non-Authoritative Information',
+        204 => '204 No Content',
+        205 => '205 Reset Content',
+        206 => '206 Partial Content',
+
+        # Redirection.
+        300 => '300 Multiple Choices',
+        301 => '301 Moved Permanently',
+        302 => '302 Found',
+        303 => '303 See Other',
+        304 => '304 Not Modified',
+        305 => '305 Use Proxy',
+        306 => '306 Unused',
+        307 => '307 Temporary Redirect',
+
+        # Client errors.
+        400 => '400 Bad Request',
+        401 => '401 Unauthorized',
+        402 => '402 Payment Required',
+        403 => '403 Forbidden',
+        404 => '404 Not Found',
+        405 => '405 Method Not Allowed',
+        406 => '406 Not Acceptable',
+        407 => '407 Proxy Authentication Required',
+        408 => '408 Request Timeout',
+        409 => '409 Conflict',
+        410 => '410 Gone',
+        411 => '411 Length Required',
+        412 => '412 Precondition Required',
+        413 => '413 Request Entry Too Large',
+        414 => '414 Request-URI Too Long',
+        415 => '415 Unsupported Media Type',
+        416 => '416 Requested Range Not Satisfiable',
+        417 => '417 Expectation Failed',
+
+        # Server errors.
+        500 => '500 Internal Server Error',
+        501 => '501 Not Implemented',
+        502 => '502 Bad Gateway',
+        503 => '503 Service Unavailable',
+        504 => '504 Gateway Timeout',
+        505 => '505 HTTP Version Not Supported'
+    ];
+
+    /**
      * @var string Response body.
      */
     protected $body = null;
@@ -35,67 +96,6 @@ class Response
     protected $finished = false;
 
     /**
-     * @var array Status codes for no-body responses.
-     */
-    protected $no_body = [100, 101, 204, 205, 301, 302, 303, 304, 307];
-
-    /**
-     * @var array Response status messages.
-     */
-    protected $statuses = [
-        # Informational
-        100 => "100 Continue",
-        101 => "101 Switching Protocols",
-
-        # Success!
-        200 => "200 OK",
-        201 => "201 Created",
-        202 => "202 Accepted",
-        203 => "203 Non-Authoritative Information",
-        204 => "204 No Content",
-        205 => "205 Reset Content",
-        206 => "206 Partial Content",
-
-        # Redirection.
-        300 => "300 Multiple Choices",
-        301 => "301 Moved Permanently",
-        302 => "302 Found",
-        303 => "303 See Other",
-        304 => "304 Not Modified",
-        305 => "305 Use Proxy",
-        306 => "306 Unused",
-        307 => "307 Temporary Redirect",
-
-        # Client errors.
-        400 => "400 Bad Request",
-        401 => "401 Unauthorized",
-        402 => "402 Payment Required",
-        403 => "403 Forbidden",
-        404 => "404 Not Found",
-        405 => "405 Method Not Allowed",
-        406 => "406 Not Acceptable",
-        407 => "407 Proxy Authentication Required",
-        408 => "408 Request Timeout",
-        409 => "409 Conflict",
-        410 => "410 Gone",
-        411 => "411 Length Required",
-        412 => "412 Precondition Required",
-        413 => "413 Request Entry Too Large",
-        414 => "414 Request-URI Too Long",
-        415 => "415 Unsupported Media Type",
-        416 => "416 Requested Range Not Satisfiable",
-        417 => "417 Expectation Failed",
-
-        # Server errors.
-        500 => "500 Internal Server Error",
-        501 => "501 Not Implemented",
-        502 => "502 Bad Gateway",
-        503 => "503 Service Unavailable",
-        504 => "504 Gateway Timeout",
-        505 => "505 HTTP Version Not Supported"
-    ];
-
-    /**
      * Creates a new Response object;
      * defaults to a clean and successful HTML response.
      *
@@ -104,9 +104,9 @@ class Response
      * @param array       $headers Response headers.
      */
     public function __construct(
-        $body = "",
+        $body = '',
         int $status = 200,
-        array $headers = ["content-type" => "text/html; charset=utf-8"]
+        array $headers = ['content-type' => 'text/html; charset=utf-8']
     ) {
         $this->setStatus($status);
         $this->setBody($body);
@@ -125,12 +125,12 @@ class Response
     public function finish(Request $request) : Response
     {
         if ($this->finished) {
-            throw new \LogicException("The response has already finished.");
+            throw new \LogicException('The response has already finished.');
         }
 
         $this->request = $request;
 
-        $this->headers->set("content-length", strlen($this->body));
+        $this->headers->set('content-length', strlen($this->body));
         $this->setEmptyResponse();
 
         $this->writeHeaders();
@@ -189,7 +189,7 @@ class Response
      */
     public function getStatusMessage() : string
     {
-        return $this->statuses[$this->status];
+        return static::RESPONSE_STATUSES[$this->status];
     }
 
     /**
@@ -206,8 +206,8 @@ class Response
             return $this;
         }
 
-        $prefix = "Body must be null or scalar, ";
-        $suffix = gettype($body) . " given.";
+        $prefix = 'Body must be null or scalar, ';
+        $suffix = gettype($body) . ' given.';
 
         throw new \InvalidArgumentException("{$prefix}{$suffix}");
     }
@@ -234,7 +234,7 @@ class Response
      */
     public function setStatus(int $status) : Response
     {
-        if (in_array($status, $this->statuses)) {
+        if (in_array($status, static::RESPONSE_STATUSES)) {
             $this->status = $status;
 
             return $this;
@@ -257,8 +257,8 @@ class Response
             return $this;
         }
 
-        $prefix = "Appended content must be null or scalar, ";
-        $suffix = gettype($appendix) . " given.";
+        $prefix = 'Appended content must be null or scalar, ';
+        $suffix = gettype($appendix) . ' given.';
 
         throw new \InvalidArgumentException("{$prefix}{$suffix}");
     }
@@ -270,15 +270,15 @@ class Response
      */
     protected function setEmptyResponse()
     {
-        $empty = in_array($this->status, $this->no_body);
+        $empty = in_array($this->status, static::NO_BODY_STATUSES);
 
         if ($this->request->isHead() || $empty) {
             $this->body = null;
         }
 
         if ($empty) {
-            $this->headers->delete("content-length");
-            $this->headers->delete("content-type");
+            $this->headers->delete('content-length');
+            $this->headers->delete('content-type');
         }
     }
 
@@ -296,7 +296,7 @@ class Response
     protected function writeHeaders()
     {
         if (headers_sent() === false) {
-            header("{$this->request->protocol} {$this->statuses[$this->status]}");
+            header("{$this->request->protocol} {static::RESPONSE_STATUSES[$this->status]}");
 
             foreach ($this->headers->all() as $key => $value) {
                 header("{$key}: {$value}", false);

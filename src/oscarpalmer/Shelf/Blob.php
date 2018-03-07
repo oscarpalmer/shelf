@@ -7,7 +7,7 @@ namespace oscarpalmer\Shelf;
 /**
  * Blob; a container class.
  */
-class Blob extends \ArrayObject
+class Blob extends \ArrayObject implements IBlob
 {
     /**
      * Get the actual Blob array.
@@ -37,11 +37,11 @@ class Blob extends \ArrayObject
     /**
      * Get the value for a specific key.
      *
-     * @param  string $key     Key to look for.
-     * @param  mixed  $default Default value.
-     * @return mixed  Found or default value.
+     * @param  mixed $key     Key to look for.
+     * @param  mixed $default Default value.
+     * @return mixed Found or default value.
      */
-    public function get(string $key, $default = null)
+    public function get($key, $default = null)
     {
         if ($this->offsetExists($key)) {
             return $this->offsetGet($key);
@@ -64,11 +64,11 @@ class Blob extends \ArrayObject
     /**
      * Set value for key in Blob.
      *
-     * @param  string $key   Key to set.
-     * @param  mixed  $value Value for key.
-     * @return Blob   Blob object for optional chaining.
+     * @param  mixed $key   Key to set.
+     * @param  mixed $value Value for key.
+     * @return Blob  Blob object for optional chaining.
      */
-    public function set(string $key, $value) : Blob
+    public function set($key, $value) : Blob
     {
         $this->offsetSet($key, $value);
 

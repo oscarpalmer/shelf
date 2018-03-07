@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace oscarpalmer\Shelf;
 
-class Session
+class Session implements IBlob
 {
     /**
      * Start a session.
@@ -25,11 +25,7 @@ class Session
      */
     public function all() : array
     {
-        if (isset($_SESSION)) {
-            return $_SESSION;
-        }
-
-        return [];
+        return $_SESSION ?? [];
     }
 
     /**
@@ -56,15 +52,11 @@ class Session
      */
     public function get($key, $default = null)
     {
-        if (array_key_exists($key, $_SESSION)) {
-            return $_SESSION[$key];
-        }
-
-        return $default;
+        return $_SESSION[$key] ?? $default;
     }
 
     /**
-     * Check if $_SERVERS has key.
+     * Check if $_SESSION has key.
      *
      * @param  mixed $key Key to look for.
      * @return bool  True if found.
@@ -109,8 +101,8 @@ class Session
             return session_start();
         }
 
-        $prefix = "Session variable must be of type \"boolean\" or \"string\", \"";
+        $prefix = 'Session variable must be of type \'boolean\' or \'string\', \'';
 
-        throw new \InvalidArgumentException($prefix . gettype($session) . "\" given.");
+        throw new \InvalidArgumentException($prefix . gettype($session) . '\' given.');
     }
 }

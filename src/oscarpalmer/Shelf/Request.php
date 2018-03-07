@@ -10,6 +10,11 @@ namespace oscarpalmer\Shelf;
 class Request
 {
     /**
+     * @var array Array of acceptable request methods.
+     */
+    const REQUEST_METHODS = ['DELETE', 'GET', 'HEAD', 'POST', 'PUT'];
+
+    /**
      * @var Blob Cookie parameters.
      */
     protected $cookies = null;
@@ -55,32 +60,23 @@ class Request
     protected $session = null;
 
     /**
-     * Creates a new Request object from arrays of server, query, and request parameters.
+     * Creates a new Request object from two parameters,
+     * one array of server information and one optional session variable.
      *
      * @param array       $server  Server parameters.
-     * @param array       $query   Query parameters.
-     * @param array       $data    Request parameters.
-     * @param array       $cookies Cookie parameters.
-     * @param array       $files   Files parameters.
      * @param bool|string $session True to start session; string for named session.
      */
-    public function __construct(
-        array $server = [],
-        array $query = [],
-        array $data = [],
-        array $cookies = [],
-        array $files = [],
-        $session = true
-    ) {
-        $this->cookies = new Blob($cookies);
-        $this->data = new Blob($data);
-        $this->files = new Blob($files);
-        $this->query = new Blob($query);
+    public function __construct(array $server, $session = true)
+    {
+        $this->cookies = new Cookies();
+        $this->data = new Blob($_POST);
+        $this->files = new Blob($_FILES);
+        $this->query = new Blob($_GET);
         $this->server = new Blob($server);
         $this->session = new Session($session);
 
-        $this->protocol = $this->server->get("SERVER_PROTOCOL", "HTTP/1.1");
-        $this->request_method = $this->server->get("REQUEST_METHOD", "GET");
+        $this->protocol = $this->server->get('SERVER_PROTOCOL', 'HTTP/1.1');
+        $this->request_method = $this->server->get('REQUEST_METHOD', 'GET');
 
         $this->setPathInfo();
     }
@@ -110,7 +106,7 @@ class Request
      */
     public function isAjax() : bool
     {
-        return $this->server->get("HTTP_X_REQUESTED_WITH") === "XMLHttpRequest";
+        return $this->server->get('HTTP_X_REQUESTED_WITH') === 'XMLHttpRequest';
     }
 
     /**
@@ -120,7 +116,7 @@ class Request
      */
     public function isDelete() : bool
     {
-        return $this->request_method === "DELETE";
+        return $this->request_method === static::REQUEST_METHODS[0];
     }
 
     /**
@@ -130,7 +126,7 @@ class Request
      */
     public function isGet() : bool
     {
-        return $this->request_method === "GET";
+        return $this->request_method === static::REQUEST_METHODS[1];
     }
 
     /**
@@ -140,7 +136,7 @@ class Request
      */
     public function isHead() : bool
     {
-        return $this->request_method === "HEAD";
+        return $this->request_method === static::REQUEST_METHODS[2];
     }
 
     /**
@@ -150,7 +146,7 @@ class Request
      */
     public function isPost() : bool
     {
-        return $this->request_method === "POST";
+        return $this->request_method === static::REQUEST_METHODS[3];
     }
 
     /**
@@ -160,7 +156,7 @@ class Request
      */
     public function isPut() : bool
     {
-        return $this->request_method === "PUT";
+        return $this->request_method === static::REQUEST_METHODS[4];
     }
 
     /** Protected functions. */
@@ -170,20 +166,21 @@ class Request
      */
     protected function setPathInfo()
     {
-        $query = $this->server->get("QUERY_STRING", "");
-        $script = $this->server->get("SCRIPT_NAME", "");
-        $uri = $this->server->get("REQUEST_URI", "/");
+        $query = $this->server->get('QUERY_STRING', '');
+        $script = $this->server->get('SCRIPT_NAME', '');
+        $uri = $this->server->get('REQUEST_URI', '/');
 
         $path = preg_replace(
             [
-                "/\A" . preg_quote($script, "/") . "/",
-                "/\A" . preg_quote(dirname($script), "/") . "/",
-                "/\?" . preg_quote($query, "/") . "\z/"
+                '/\A' . preg_quote($script, '/') . '/',
+                '/\A' . preg_quote(dirname($script), '/') . '/',
+                '/\?' . preg_quote($query, '/') . '\z/'
             ],
-            "",
-            $uri);
+            '',
+            $uri
+        );
 
-        $this->path_info = "/" . ltrim($path, "/");
+        $this->path_info = '/' . ltrim($path, '/');
     }
 
     /** Static functions. */
@@ -196,6 +193,6 @@ class Request
      */
     public static function fromGlobals($session = true) : Request
     {
-        return new static($_SERVER, $_GET, $_POST, $_COOKIE, $_FILES, $session);
+        return new static($_SERVER, $session);
     }
 }
