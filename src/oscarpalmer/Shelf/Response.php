@@ -296,7 +296,9 @@ class Response
     protected function writeHeaders()
     {
         if (headers_sent() === false) {
-            header("{$this->request->protocol} {static::RESPONSE_STATUSES[$this->status]}");
+            $status = static::RESPONSE_STATUSES[$this->status];
+
+            header("{$this->request->protocol} {$status}");
 
             foreach ($this->headers->all() as $key => $value) {
                 header("{$key}: {$value}", false);
