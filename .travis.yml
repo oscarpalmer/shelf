@@ -8,6 +8,7 @@ php:
   - 8.0
 
 before_script:
+  - pip install codecov
   - travis_retry composer self-update
   - travis_retry composer install --prefer-source --no-interaction
 
@@ -15,4 +16,4 @@ script:
   - vendor/bin/phpunit --coverage-clover coverage.xml
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - codecov
