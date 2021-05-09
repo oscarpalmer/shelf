@@ -12,14 +12,14 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     # Mock Request.
     protected $request;
 
-    public function setUp()
+    public function setUp(): void
     {
         $_SESSION = [];
 
         $array = [
             'REQUEST_METHOD' => 'GET',
             'REQUEST_URI' => '/path',
-            'SERVER_PROTOCOL' => 'HTTP/1.0'
+            'SERVER_PROTOCOL' => 'HTTP/2'
         ];
 
         $this->request = $array;
@@ -62,12 +62,12 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             $this->assertNotNull($blob);
             $this->assertInstanceOf('oscarpalmer\Shelf\Blob', $blob);
         }
-        
+
         $this->assertInstanceOf('oscarpalmer\Shelf\Cookies', $request->cookies);
         $this->assertInstanceOf('oscarpalmer\Shelf\Session', $request->session);
 
         $this->assertSame('/path', $request->path_info);
-        $this->assertSame('HTTP/1.0', $request->protocol);
+        $this->assertSame('HTTP/2', $request->protocol);
         $this->assertSame('GET', $request->request_method);
         $this->assertNull($request->server_admin);
     }
@@ -93,6 +93,8 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($request->isDelete());
         $this->assertTrue($request->isGet());
         $this->assertFalse($request->isHead());
+        $this->assertFalse($request->isOptions());
+        $this->assertFalse($request->isPatch());
         $this->assertFalse($request->isPost());
         $this->assertFalse($request->isPut());
     }

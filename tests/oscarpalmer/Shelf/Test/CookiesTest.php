@@ -2,12 +2,11 @@
 
 namespace oscarpalmer\Shelf\Test;
 
-use oscarpalmer\Shelf\Request;
 use oscarpalmer\Shelf\Cookies;
 
 class CookiesTest extends \PHPUnit\Framework\TestCase
 {
-    public function setup()
+    public function setup(): void
     {
         $_COOKIE = [];
     }
@@ -27,9 +26,9 @@ class CookiesTest extends \PHPUnit\Framework\TestCase
         $cookies = new Cookies;
 
         $this->assertEmpty($cookies->all());
-        
+
         $_COOKIE['key'] = 'value';
-        
+
         $this->assertNotEmpty($cookies->all());
     }
 
@@ -39,25 +38,23 @@ class CookiesTest extends \PHPUnit\Framework\TestCase
     public function testDeleteHasGetAndSet()
     {
         $cookies = new Cookies;
-        
+
         $this->assertNull($cookies->get('key'));
-        
         $this->assertFalse($cookies->has('key'));
-        
+
         $cookies->set('key', 'value');
 
         // Fake the setting of value for key
         $_COOKIE['key'] = 'value';
-        
+
         $this->assertEquals('value', $cookies->get('key'));
-        
         $this->assertTrue($cookies->has('key'));
-        
+
         $cookies->delete('key', 'value');
 
         // Fake deletion of value for key
         $_COOKIE['key'] = '';
-        
+
         $this->assertEquals('', $cookies->get('key'));
     }
 

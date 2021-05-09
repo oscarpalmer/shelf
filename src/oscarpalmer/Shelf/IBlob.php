@@ -1,35 +1,33 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace oscarpalmer\Shelf;
 
 interface IBlob
 {
-    /** Public functions. */
+    /**
+     * Method outline for retrieving data array
+     */
+    public function all(): array;
 
     /**
-     * Method outline for retrieving data array.
+     * Method outline for deleting value by key
      */
-    public function all();
+    public function delete(int|string $key): self;
 
     /**
-     * Method outline for deleting value by key.
+     * Method outline for retreving value by key
      */
-    public function delete($key);
+    public function get(int|string $key, mixed $default = null): mixed;
 
     /**
-     * Method outline for retreving value by key.
+     * Method outline for checking the existence of key
      */
-    public function get($key, $default = null);
+    public function has(int|string $key): bool;
 
     /**
-     * Method outline for checking the existence of key.
+     * Method outline for setting value for key
      */
-    public function has($key);
-
-    /**
-     * Method outline for setting value for key.
-     */
-    public function set($key, $value);
+    public function set(int|string $key, mixed $value): self;
 }

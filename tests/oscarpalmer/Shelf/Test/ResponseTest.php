@@ -2,15 +2,18 @@
 
 namespace oscarpalmer\Shelf\Test;
 
+use InvalidArgumentException;
+use LogicException;
 use oscarpalmer\Shelf\Request;
 use oscarpalmer\Shelf\Response;
+use TypeError;
 
 class ResponseTest extends \PHPUnit\Framework\TestCase
 {
     protected $request;
     protected $response;
 
-    public function setUp()
+    public function setUp(): void
     {
         $_SESSION = [];
 
@@ -30,9 +33,9 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     public function testEmptyResponses()
     {
         # Informational, no-content, and not-modified responses.
-        foreach ([100, 101, 204, 205, 301, 302, 303, 304, 307] as $status)
-        {
+        foreach ([100, 101, 204, 205, 301, 302, 303, 304, 307] as $status) {
             $response = new Response('This won\'t be echoed.', $status);
+
             $response->finish(new Request([]));
 
             $this->expectOutputString('');
@@ -43,6 +46,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     {
         # HEAD response.
         $response = new Response('This won\'t be echoed.');
+
         $response->finish(new Request(['REQUEST_METHOD' => 'HEAD']));
 
         $this->expectOutputString('');
@@ -59,23 +63,20 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $response->finish($request);
 
         $this->expectOutputString('Test.');
+        $this->expectException(LogicException::class);
 
-        try {
-            $response->finish($request);
-        } catch (\Exception $e) {
-            $this->assertInstanceOf('LogicException', $e);
-        }
+        $response->finish($request);
     }
 
     public function testGetHeaders()
     {
-        $this->assertInternalType('array', $this->response->getHeaders());
+        $this->assertIsArray($this->response->getHeaders());
         $this->assertCount(1, $this->response->getHeaders());
     }
 
     public function testGetStatusMessage()
     {
-        $this->assertInternalType('string', $this->response->getStatusMessage());
+        $this->assertIsString($this->response->getStatusMessage());
         $this->assertSame('200 OK', $this->response->getStatusMessage());
     }
 
@@ -83,64 +84,68 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     {
         $response = $this->response;
 
-        $this->assertInternalType('string', $response->getBody());
+        $this->assertIsString($response->getBody());
         $this->assertSame('Test.', $response->getBody());
 
         $response->setBody('Hello, world!');
-        $this->assertInternalType('string', $response->getBody());
-        $this->assertSame('Hello, world!', $response->getBody());
 
-        try {
-            $response->setBody([]);
-        } catch (\Exception $e) {
-            $this->assertInstanceOf('InvalidArgumentException', $e);
-        }
+        $this->assertIsString($response->getBody());
+        $this->assertSame('Hello, world!', $response->getBody());
+        $this->expectException(TypeError::class);
+
+        $response->setBody([]);
     }
 
-    public function testGetAndSetHeader()
+    /**
+     * @covers \oscarpalmer\Shelf\Response::getHeader
+     * @covers \oscarpalmer\Shelf\Response::setHeader
+     * @covers \oscarpalmer\Shelf\Response::setHeaders
+     */
+    public function testGetAndSetHeaders()
     {
         $response = $this->response;
 
         $this->assertSame('text/plain', $response->getHeader('Content-Type'));
         $this->assertNull($response->getHeader('Content-Length'));
 
-        $response->setHeader('Content-Type', 'text/html');
+        $response->setHeaders(['Content-Type' => 'text/html']);
+
         $this->assertSame('text/html', $response->getHeader('Content-Type'));
+
+        $response->setHeader('Content-Type', null);
+
+        $this->assertNull($response->getHeader('Content-Type'));
     }
 
     public function testGetAndSetStatus()
     {
         $response = $this->response;
 
-        $this->assertInternalType('integer', $response->getStatus());
+        $this->assertIsInt($response->getStatus());
         $this->assertSame(200, $response->getStatus());
 
         $response->setStatus(404);
-        $this->assertInternalType('integer', $response->getStatus());
-        $this->assertSame(404, $response->getStatus());
 
-        try {
-            $response->setStatus(1234);
-        } catch (\Exception $e) {
-            $this->assertInstanceOf('LogicException', $e);
-        }
+        $this->assertIsInt($response->getStatus());
+        $this->assertSame(404, $response->getStatus());
+        $this->expectException(InvalidArgumentException::class);
+
+        $response->setStatus(1234);
     }
 
     public function testWrite()
     {
         $response = $this->response;
 
-        $this->assertInternalType('string', $response->getBody());
+        $this->assertIsString($response->getBody());
         $this->assertSame('Test.', $response->getBody());
 
         $response->write(' - Shelf');
-        $this->assertInternalType('string', $response->getBody());
-        $this->assertSame('Test. - Shelf', $response->getBody());
 
-        try {
-            $response->write([]);
-        } catch (\Exception $e) {
-            $this->assertInstanceOf('InvalidArgumentException', $e);
-        }
+        $this->assertIsString('string', $response->getBody());
+        $this->assertSame('Test. - Shelf', $response->getBody());
+        $this->expectException(TypeError::class);
+
+        $response->write([]);
     }
 }

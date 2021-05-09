@@ -2,12 +2,12 @@
 
 namespace oscarpalmer\Shelf\Test;
 
-use oscarpalmer\Shelf\Request;
 use oscarpalmer\Shelf\Session;
+use TypeError;
 
 class SessionTest extends \PHPUnit\Framework\TestCase
 {
-    public function setup()
+    public function setUp(): void
     {
         $_SESSION = [];
     }
@@ -35,11 +35,9 @@ class SessionTest extends \PHPUnit\Framework\TestCase
 
     public function testBadSession()
     {
-        try {
-            $session = new Session([]);
-        } catch (\Exception $e) {
-            $this->assertInstanceOf('InvalidArgumentException', $e);
-        }
+        $this->expectException(TypeError::class);
+
+        new Session([]);
     }
 
     /**
@@ -54,7 +52,6 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $session->set('key', 'value');
 
         $this->assertSame('value', $session->get('key'));
-
         $this->assertTrue($session->has('key'));
 
         $session->delete('key');

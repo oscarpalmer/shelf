@@ -3,12 +3,12 @@
 namespace oscarpalmer\Shelf;
 
 /**
- * Main Shelf class.
+ * Main Shelf class
  */
 class Shelf
 {
     /**
-     * @var string Current version number.
+     * @var string Current version number
      */
-    const VERSION = '2.3.1';
+    const VERSION = '3.0.0';
 }

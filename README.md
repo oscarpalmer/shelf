@@ -1,8 +1,8 @@
 # Shelf
 
-[![PHP version](https://badge.fury.io/ph/oscarpalmer%2Fshelf.svg)](http://badge.fury.io/ph/oscarpalmer%2Fshelf) [![Build Status](https://travis-ci.org/oscarpalmer/shelf.png?branch=master)](https://travis-ci.org/oscarpalmer/shelf) [![Coverage](https://codecov.io/gh/oscarpalmer/shelf/branch/master/graph/badge.svg)](https://codecov.io/gh/oscarpalmer/shelf)
+[![PHP version](https://badge.fury.io/ph/oscarpalmer%2Fshelf.svg)](http://badge.fury.io/ph/oscarpalmer%2Fshelf) [![Build status](https://api.travis-ci.com/oscarpalmer/shelf.svg?branch=main)](https://travis-ci.com/oscarpalmer/shelf) [![Code coverage](https://codecov.io/gh/oscarpalmer/shelf/branch/main/graph/badge.svg?token=HE32BuJEmt)](https://codecov.io/gh/oscarpalmer/shelf)
 
-Shelf is a [Rack](//rack.github.io)-like interface for PHP `>=7`.
+Shelf is a [Rack](//rack.github.io)-like interface for PHP `>=8`.
 
 ## Getting started
 
@@ -13,14 +13,14 @@ Shelf is available via [Composer & Packagist](//packagist.org/packages/oscarpalm
 ```json
 {
   "require": {
-    "oscarpalmer/shelf": "2.3.*"
+    "oscarpalmer/shelf": "3.0.*"
   }
 }
 ```
 
 ### Basic usage
 
-Here are two small examples to get you up and running in ~ten seconds. Please consult the [API reference](#api) if you get stuck or want to learn more.
+Here are two small examples to get you up and running in ~ten seconds. Please consult [the API reference](#api) if you get stuck or want to learn more.
 
 #### Request
 
@@ -51,97 +51,101 @@ $response->finish($request);
 ### Shelf
 
 ```php
-# Constants
-Shelf::VERSION;                  #  Current Shelf version number
+# Shelf version
+Shelf::VERSION
 ```
 
 ### Request
 
 ```php
 # Constructor
-$request = new Request(
-    $server,                     #  Server parameters, like $_SERVER
-    $session                     #  True to start a session, or name of session to start
-);
-Request::fromGlobals($session);  #  Static constructor for a superglobal Request object
+# Takes an array of server variables and a session variable;
+# the session variable can be either boolean (to enable/disable sessions),
+# or a string (to enable a session with a unique name)
+$request = new Shelf\Request($server, $session);
 
-# Constants
-Request::REQUEST_METHODS         #  Array of acceptable request methods
+# Check if HTTP request matches an expected type
+$request->isDelete();
+$request->isGet();
+$request->isHead();
+$request->isOptions();
+$request->isPatch();
+$request->isPost();
+$request->isPut();
 
-# Blobs
-# Check below for info on how to use Blobs
-$request->data;                  #  A Blob of request (~$_POST) parameters
-$request->files;                 #  A Blob of files (~$_FILES) parameters
-$request->query;                 #  A Blob of query (~$_GET) parameters
-$request->server;                #  A Blob of server (~$_SERVER) parameters
+# Check if HTTP request was made via AJAX
+$request->isAjax();
 
-# Variables
-$request->path_info;             #  Current path
-$request->protocol;              #  Current protocol
-$request->request_method;        #  Current request method
+# Getters for Blobs (described below) for accessing HTTP request information
+$request->cookies;  # $_COOKIES
+$request->data;     # $_POST
+$request->files;    # $_FILES
+$request->query;    # $_GET
+$request->server;   # $_SERVER or custom server variables
+$request->session;  # $_SESSION
 
-# You can also access other server variables, e.g.:
-$request->server_admin           #  you@your-email.com
-
-# Methods
-$request->isAjax();              #  Is it an AJAX request?
-$request->isDelete();            #  Is it a delete request?
-$request->isGet();               #  Is it a get request?
-$request->isHead();              #  Is it a head request?
-$request->isPost();              #  Is it a post request?
-$request->isPut();               #  Is it a put request?
+# Alternative to using the constructor; automatically uses the $_SERVER-variables
+# The session variable still works the same :)
+Shelf\Request::fromGlobals($session);
 ```
 
 ### Response
 
 ```php
 # Constructor
-$response = new Response(
-    $body,                       #  Response body; must be scalar or null
-    $status,                     #  Response status code; must be integer
-    $headers                     #  Response headers; must be an array
-);
+# Takes a scalar body, an HTTP status code, and an array of HTTP headers
+$response = new Shelf\Response($body, $status, $headers);
 
-# Constants
-Response::NO_BODY_STATUSES       #  Status codes for when to drop the response's body
-Response::RESPONSE_STATUSES      #  Acceptable status codes, and their messages
+# Retrieves the response body as a string
+$response->getBody();
 
-# Methods
-$response->finish($request);     #  Sets the response headers and echoes the response body
-                                 #  The parameter must be a Shelf Request object
+# Retrieves the value for a header
+$response->getHeader();
 
-# Getters
-$response->getBody();            #  Returns the current response body
-$response->getHeader($name);     #  Returns a response header by name
-$response->getHeaders();         #  Returns all response headers
-$response->getStatus();          #  Returns the current response status code
-$response->getStatusMessage();   #  Returns the current response status message
+# Retrieves all headers
+$response->getHeaders();
 
-# Setters
-$response->setBody($body);       #  Set the response body; must be scalar or null
-$response->setHeader($k, $v);    #  Set a new response header; both key and value must be strings
-$response->setStatus($status);   #  Set the response status code; must be integer
-$response->write($appendix);     #  Append content to the response body; must be scalar or null
+# Retrieves the status code 
+$response->getStatus();
+
+# Retrieves a status message for the response, e.g. '200 OK'
+$response->getStatusMessage();
+
+# Set a scalar value as the response body
+$response->setBody($body);
+
+# Set a response header
+$response->setHeader($key, $value);
+
+# Set multiple respons headers
+$response->setHeaders($headers);
+
+# Set response status
+$response->setStatus($status);
+
+# Append scalar value to the response body
+$response->write($content);
 ```
 
-### Blob, Cookies, and Session
+### Blob
 
-Blob is a container class for parameter storage. Both the Cookies and Session class shares the same interface.
+Blobs are containers used to store any kind of iterable data. In the `Request`-class, Blobs are used to manage `$_COOKIES`, `$_FILES`, `$_GET`, `$_POST`, `$_SERVER` (or custom server variables), and `$_SESSION`-information. In the `Response`-class, a Blob is used to manage HTTP-headers.
 
 ```php
-# Constructor
-$item = new Blob($array);        #  The parameter is optional and defaults to an empty array
-$cookies = new Cookies($array);  #  Standalone Blob-like object for handling cookies
-$session = new Session($var);    #  True to start a session, or name of session to start;
-                                 #  Request starts sessions, so you don't have to worry about
-                                 #  this constructor as it'll abort if $_SESSION alredy exists
+# Retrieve all Blob values as an array
+$blob->all();
 
-# Methods
-$item->all();                    #  Get the actual array of data
-$item->delete('key');            #  Delete item; returns object for chaining
-$item->get('key', 'default');    #  Get data parameter by key with an optional default value
-$item->has('key');               #  Check if key exists in data
-$item->set('key', 'value');      #  Set value for key; returns object for chaining
+# Delete a value by key
+$blob->delete($key);
+
+# Retrieve a value by key with an optional default value
+$blob->get($key, $default);
+
+# Check if Blob has key
+$blob->has($key);
+
+# Set value by key
+$blob->set($key, $value);
 ```
 
 ## License

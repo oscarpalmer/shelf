@@ -9,7 +9,7 @@ class BlobTest extends \PHPUnit\Framework\TestCase
     # Mock Blob.
     protected $blob;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->blob = new Blob([
             0 => 'alpha',

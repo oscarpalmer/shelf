@@ -1,19 +1,20 @@
 env:
   global:
-    - CODECOV_TOKEN="62cd0951-8539-4fa1-b1c5-3793e2b50e2a"
+    - CODECOV_TOKEN="432f92ad-0e2d-4915-bde0-7599c4808e8c"
 
 language: php
 
 php:
-  - 7.0
-  - 7.1
+  - 8.0
 
 before_script:
+  - pip install --user codecov
   - travis_retry composer self-update
-  - travis_retry composer install --no-interaction --prefer-source
+  - travis_retry composer install --prefer-source --no-interaction
 
 script:
-  - vendor/bin/phpunit --coverage-clover=coverage.xml
+  - XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-clover coverage.xml
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - ls -la
+  - codecov

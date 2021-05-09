@@ -1,31 +1,31 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace oscarpalmer\Shelf;
 
 /**
- * Blob; a container class.
+ * Blob, a container class
  */
 class Blob extends \ArrayObject implements IBlob
 {
     /**
-     * Get the actual Blob array.
+     * Get the actual Blob array
      *
-     * @return array Blob array.
+     * @return array Blob array
      */
-    public function all() : array
+    public function all(): array
     {
         return $this->getArrayCopy();
     }
 
     /**
-     * Delete value for key in Blob.
+     * Delete value for key in Blob
      *
-     * @param  mixed $key Key to delete.
-     * @return Blob  Blob object for optional chaining.
+     * @param int|string $key Key to delete
+     * @return Blob Blob object for optional chaining
      */
-    public function delete($key) : Blob
+    public function delete(int|string $key): Blob
     {
         if ($this->offsetExists($key)) {
             $this->offsetUnset($key);
@@ -35,13 +35,13 @@ class Blob extends \ArrayObject implements IBlob
     }
 
     /**
-     * Get the value for a specific key.
+     * Get the value for a specific key
      *
-     * @param  mixed $key     Key to look for.
-     * @param  mixed $default Default value.
-     * @return mixed Found or default value.
+     * @param int|string $key Key to look for
+     * @param mixed $default Default value
+     * @return mixed Found or default value
      */
-    public function get($key, $default = null)
+    public function get(int|string $key, mixed $default = null): mixed
     {
         if ($this->offsetExists($key)) {
             return $this->offsetGet($key);
@@ -51,24 +51,24 @@ class Blob extends \ArrayObject implements IBlob
     }
 
     /**
-     * Check if Blob has key.
+     * Check if Blob has key
      *
-     * @param  mixed $key Key to look for.
-     * @return bool  True if found.
+     * @param mixed $key Key to look for
+     * @return bool True if found
      */
-    public function has($key) : bool
+    public function has(int|string $key): bool
     {
         return $this->offsetExists($key);
     }
 
     /**
-     * Set value for key in Blob.
+     * Set value for key in Blob
      *
-     * @param  mixed $key   Key to set.
-     * @param  mixed $value Value for key.
-     * @return Blob  Blob object for optional chaining.
+     * @param mixed $key Key to set
+     * @param mixed $value Value for key
+     * @return Blob Blob object for optional chaining
      */
-    public function set($key, $value) : Blob
+    public function set(int|string $key, mixed $value): Blob
     {
         $this->offsetSet($key, $value);
 
