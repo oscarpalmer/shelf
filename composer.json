@@ -22,8 +22,6 @@
     "php": ">=8.0"
   },
   "require-dev": {
-    "ext-pcov": "*",
-    "ext-xdebug": "*",
     "phpunit/php-code-coverage": ">=9.2",
     "phpunit/phpunit": ">=9.5"
   },
