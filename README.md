@@ -1,6 +1,6 @@
 # Shelf
 
-[![PHP version](https://badge.fury.io/ph/oscarpalmer%2Fshelf.svg)](http://badge.fury.io/ph/oscarpalmer%2Fshelf) [![Build Status](https://api.travis-ci.com/oscarpalmer/shelf.svg?branch=main)](https://travis-ci.com/oscarpalmer/shelf) [![Coverage](https://codecov.io/gh/oscarpalmer/shelf/branch/master/graph/badge.svg)](https://codecov.io/gh/oscarpalmer/shelf)
+[![PHP version](https://badge.fury.io/ph/oscarpalmer%2Fshelf.svg)](http://badge.fury.io/ph/oscarpalmer%2Fshelf) [![Build status](https://api.travis-ci.com/oscarpalmer/shelf.svg?branch=main)](https://travis-ci.com/oscarpalmer/shelf) [![Code coverage](https://codecov.io/gh/oscarpalmer/shelf/branch/main/graph/badge.svg?token=HE32BuJEmt)](https://codecov.io/gh/oscarpalmer/shelf)
 
 Shelf is a [Rack](//rack.github.io)-like interface for PHP `>=8`.
 
