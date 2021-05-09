@@ -19,11 +19,13 @@
   "license": "MIT",
   "name": "oscarpalmer/shelf",
   "require": {
-    "php": ">=7.0"
+    "php": ">=8.0"
   },
   "require-dev": {
-    "phpunit/php-code-coverage": ">=5.2",
-    "phpunit/phpunit": ">=6.4"
+    "ext-pcov": "*",
+    "ext-xdebug": "*",
+    "phpunit/php-code-coverage": ">=9.2",
+    "phpunit/phpunit": ">=9.5"
   },
   "type": "library"
 }

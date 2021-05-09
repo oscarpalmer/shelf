@@ -1,72 +1,75 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace oscarpalmer\Shelf;
 
 /**
- * Request class.
+ * Request class
  */
 class Request
 {
-    /**
-     * @var array Array of acceptable request methods.
-     */
-    const REQUEST_METHODS = ['DELETE', 'GET', 'HEAD', 'POST', 'PUT'];
+    const METHOD_DELETE = 'DELETE';
+    const METHOD_GET = 'GET';
+    const METHOD_HEAD = 'HEAD';
+    const METHOD_OPTIONS = 'OPTIONS';
+    const METHOD_PATCH = 'PATCH';
+    const METHOD_POST = 'POST';
+    const METHOD_PUT = 'PUT';
 
     /**
-     * @var Blob Cookie parameters.
+     * @var IBlob Cookie parameters
      */
-    protected $cookies = null;
+    protected IBlob $cookies;
 
     /**
-     * @var Blob Request parameters.
+     * @var IBlob Request parameters
      */
-    protected $data = null;
+    protected IBlob $data;
 
     /**
-     * @var Blob Files parameters.
+     * @var IBlob Files parameters
      */
-    protected $files = null;
+    protected IBlob $files;
 
     /**
-     * @var string Current path.
+     * @var string Current path
      */
-    protected $path_info = null;
+    protected string $path_info;
 
     /**
-     * @var string Current protocol.
+     * @var string Current protocol
      */
-    protected $protocol = null;
+    protected string $protocol;
 
     /**
-     * @var Blob Query parameters.
+     * @var IBlob Query parameters
      */
-    protected $query = null;
+    protected IBlob $query;
 
     /**
-     * @var string Current request method.
+     * @var string Current request method
      */
-    protected $request_method = null;
+    protected string $request_method;
 
     /**
-     * @var Blob Server parameters.
+     * @var IBlob Server parameters
      */
-    protected $server = null;
+    protected IBlob $server;
 
     /**
-     * @var Session Session class.
+     * @var IBlob Session class
      */
-    protected $session = null;
+    protected IBlob $session;
 
     /**
-     * Creates a new Request object from two parameters,
-     * one array of server information and one optional session variable.
+     * Creates a new Request object from two parameters:
+     * one array of server information, and one optional session variable
      *
-     * @param array       $server  Server parameters.
-     * @param bool|string $session True to start session; string for named session.
+     * @param array $server Server parameters
+     * @param bool|string $session True to start session, string for named session
      */
-    public function __construct(array $server, $session = true)
+    public function __construct(array $server, bool|string $session = true)
     {
         $this->cookies = new Cookies();
         $this->data = new Blob($_POST);
@@ -75,21 +78,21 @@ class Request
         $this->server = new Blob($server);
         $this->session = new Session($session);
 
-        $this->protocol = $this->server->get('SERVER_PROTOCOL', 'HTTP/1.1');
-        $this->request_method = $this->server->get('REQUEST_METHOD', 'GET');
+        $this->protocol = $this->server->get('SERVER_PROTOCOL', 'HTTP/2');
+        $this->request_method = $this->server->get('REQUEST_METHOD', self::METHOD_GET);
 
         $this->setPathInfo();
     }
 
     /**
-     * Get Request parameter.
+     * Get value for Request parameter
      *
-     * @param  string $key Key for parameter.
-     * @return mixed  Value for parameter.
+     * @param string $key Key for parameter
+     * @return mixed Value for parameter
      */
-    public function __get(string $key)
+    public function __get(string $key): mixed
     {
-        # Prioritise parameters created by Shelf.
+        # Prioritise parameters created by Shelf
         if (isset($this->$key)) {
             return $this->$key;
         }
@@ -97,14 +100,14 @@ class Request
         return $this->server->get(strtoupper($key));
     }
 
-    /** Public functions. */
+    /** Public functions */
 
     /**
      * Is it an AJAX request?
      *
-     * @return bool True if requested via AJAX.
+     * @return bool True if requested via AJAX
      */
-    public function isAjax() : bool
+    public function isAjax(): bool
     {
         return $this->server->get('HTTP_X_REQUESTED_WITH') === 'XMLHttpRequest';
     }
@@ -112,59 +115,79 @@ class Request
     /**
      * Is it a DELETE request?
      *
-     * @return bool True if request method is DELETE.
+     * @return bool True if request method is DELETE
      */
-    public function isDelete() : bool
+    public function isDelete(): bool
     {
-        return $this->request_method === static::REQUEST_METHODS[0];
+        return $this->request_method === self::METHOD_DELETE;
     }
 
     /**
      * Is it a GET request?
      *
-     * @return bool True if request method is GET.
+     * @return bool True if request method is GET
      */
-    public function isGet() : bool
+    public function isGet(): bool
     {
-        return $this->request_method === static::REQUEST_METHODS[1];
+        return $this->request_method === self::METHOD_GET;
     }
 
     /**
      * Is it a HEAD request?
      *
-     * @return bool True if request method is HEAD.
+     * @return bool True if request method is HEAD
      */
-    public function isHead() : bool
+    public function isHead(): bool
     {
-        return $this->request_method === static::REQUEST_METHODS[2];
+        return $this->request_method === self::METHOD_HEAD;
+    }
+
+    /**
+     * Is it an OPTIONS request?
+     *
+     * @return bool True if request method is OPTIONS.
+     */
+    public function isOptions(): bool
+    {
+        return $this->request_method === self::METHOD_OPTIONS;
+    }
+
+    /**
+     * Is it a PATCH request?
+     *
+     * @return bool True if request method is PATCH
+     */
+    public function isPatch(): bool
+    {
+        return $this->request_method === self::METHOD_PATCH;
     }
 
     /**
      * Is it a POST request?
      *
-     * @return bool True if request method is POST.
+     * @return bool True if request method is POST
      */
-    public function isPost() : bool
+    public function isPost(): bool
     {
-        return $this->request_method === static::REQUEST_METHODS[3];
+        return $this->request_method === self::METHOD_POST;
     }
 
     /**
      * Is it a PUT request?
      *
-     * @return bool True if request method is PUT.
+     * @return bool True if request method is PUT
      */
-    public function isPut() : bool
+    public function isPut(): bool
     {
-        return $this->request_method === static::REQUEST_METHODS[4];
+        return $this->request_method === self::METHOD_PUT;
     }
 
-    /** Protected functions. */
+    /** Protected functions */
 
     /**
-     * Set path_info based on QUERY_STRING, SCRIPT_NAME, and REQUEST_URI.
+     * Set path_info based on QUERY_STRING, SCRIPT_NAME, and REQUEST_URI
      */
-    protected function setPathInfo()
+    protected function setPathInfo(): void
     {
         $query = $this->server->get('QUERY_STRING', '');
         $script = $this->server->get('SCRIPT_NAME', '');
@@ -183,15 +206,15 @@ class Request
         $this->path_info = '/' . ltrim($path, '/');
     }
 
-    /** Static functions. */
+    /** Static functions */
 
     /**
-     * Creates a new Request object based on superglobals.
+     * Creates a new Request object based on superglobals
      *
-     * @param  bool|string $session True to start session; string for named session.
-     * @return Request     A new Request object.
+     * @param bool|string $session True to start session, string for named session
+     * @return Request A new Request object
      */
-    public static function fromGlobals($session = true) : Request
+    public static function fromGlobals(bool|string $session = true): Request
     {
         return new static($_SERVER, $session);
     }

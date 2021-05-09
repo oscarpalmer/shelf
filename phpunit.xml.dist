@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="tests/bootstrap.php">
+<phpunit
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  bootstrap="tests/bootstrap.php"
+  xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage>
+    <include>
+      <directory suffix=".php">src/oscarpalmer/Shelf</directory>
+    </include>
+  </coverage>
   <testsuites>
     <testsuite name="Shelf Test Suite">
       <directory>tests/oscarpalmer/Shelf</directory>
     </testsuite>
   </testsuites>
-  <filter>
-    <whitelist>
-      <directory suffix=".php">src/oscarpalmer/Shelf</directory>
-    </whitelist>
-  </filter>
 </phpunit>

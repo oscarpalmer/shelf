@@ -1,110 +1,110 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace oscarpalmer\Shelf;
 
 /**
- * Response class.
+ * Response class
  */
 class Response
 {
     /**
-     * @var array Status codes for no-body responses.
+     * @var array Status codes for no-body responses
      */
-    const NO_BODY_STATUSES = [100, 101, 204, 205, 301, 302, 303, 304, 307];
+    protected static array $no_body = [100, 101, 204, 205, 301, 302, 303, 304, 307];
 
     /**
-     * @var array Response status messages.
+     * @var array Response status messages
      */
-    const RESPONSE_STATUSES = [
+    protected static array $statuses = [
         # Informational
-        100 => '100 Continue',
-        101 => '101 Switching Protocols',
+        100 => 'Continue',
+        101 => 'Switching Protocols',
 
-        # Success!
-        200 => '200 OK',
-        201 => '201 Created',
-        202 => '202 Accepted',
-        203 => '203 Non-Authoritative Information',
-        204 => '204 No Content',
-        205 => '205 Reset Content',
-        206 => '206 Partial Content',
+        # Success
+        200 => 'OK',
+        201 => 'Created',
+        202 => 'Accepted',
+        203 => 'Non-Authoritative Information',
+        204 => 'No Content',
+        205 => 'Reset Content',
+        206 => 'Partial Content',
 
-        # Redirection.
-        300 => '300 Multiple Choices',
-        301 => '301 Moved Permanently',
-        302 => '302 Found',
-        303 => '303 See Other',
-        304 => '304 Not Modified',
-        305 => '305 Use Proxy',
-        306 => '306 Unused',
-        307 => '307 Temporary Redirect',
+        # Redirection
+        300 => 'Multiple Choices',
+        301 => 'Moved Permanently',
+        302 => 'Found',
+        303 => 'See Other',
+        304 => 'Not Modified',
+        305 => 'Use Proxy',
+        306 => 'Unused',
+        307 => 'Temporary Redirect',
 
-        # Client errors.
-        400 => '400 Bad Request',
-        401 => '401 Unauthorized',
-        402 => '402 Payment Required',
-        403 => '403 Forbidden',
-        404 => '404 Not Found',
-        405 => '405 Method Not Allowed',
-        406 => '406 Not Acceptable',
-        407 => '407 Proxy Authentication Required',
-        408 => '408 Request Timeout',
-        409 => '409 Conflict',
-        410 => '410 Gone',
-        411 => '411 Length Required',
-        412 => '412 Precondition Required',
-        413 => '413 Request Entry Too Large',
-        414 => '414 Request-URI Too Long',
-        415 => '415 Unsupported Media Type',
-        416 => '416 Requested Range Not Satisfiable',
-        417 => '417 Expectation Failed',
+        # Client errors
+        400 => 'Bad Request',
+        401 => 'Unauthorized',
+        402 => 'Payment Required',
+        403 => 'Forbidden',
+        404 => 'Not Found',
+        405 => 'Method Not Allowed',
+        406 => 'Not Acceptable',
+        407 => 'Proxy Authentication Required',
+        408 => 'Request Timeout',
+        409 => 'Conflict',
+        410 => 'Gone',
+        411 => 'Length Required',
+        412 => 'Precondition Required',
+        413 => 'Request Entry Too Large',
+        414 => 'Request-URI Too Long',
+        415 => 'Unsupported Media Type',
+        416 => 'Requested Range Not Satisfiable',
+        417 => 'Expectation Failed',
 
-        # Server errors.
-        500 => '500 Internal Server Error',
-        501 => '501 Not Implemented',
-        502 => '502 Bad Gateway',
-        503 => '503 Service Unavailable',
-        504 => '504 Gateway Timeout',
-        505 => '505 HTTP Version Not Supported'
+        # Server errors
+        500 => 'Internal Server Error',
+        501 => 'Not Implemented',
+        502 => 'Bad Gateway',
+        503 => 'Service Unavailable',
+        504 => 'Gateway Timeout',
+        505 => 'HTTP Version Not Supported'
     ];
 
     /**
-     * @var string Response body.
+     * @var string Response body
      */
-    protected $body = null;
+    protected ?string $body;
 
     /**
-     * @var Blob Response headers.
+     * @var IBlob Response headers
      */
-    protected $headers = null;
+    protected IBlob $headers;
 
     /**
      * @var Request The Request object used by the response.
      */
-    protected $request = null;
+    protected Request $request;
 
     /**
      * @var int Response status code.
      */
-    protected $status = null;
+    protected int $status;
 
     /**
      * @var bool Has the response finished?
      */
-    protected $finished = false;
+    protected bool $finished = false;
 
     /**
-     * Creates a new Response object;
-     * defaults to a clean and successful HTML response.
+     * Creates a new Response object,
+     * defaults to a clean and successful HTML response
      *
-     * @param null|scalar $body    Response body.
-     * @param int         $status  Response status code.
-     * @param array       $headers Response headers.
+     * @param int|float|string|bool|null $body Response body
+     * @param int $status Response status code
+     * @param array $headers Response headers
      */
     public function __construct(
-        $body = '',
+        int|float|string|bool|null $body = '',
         int $status = 200,
         array $headers = ['content-type' => 'text/html; charset=utf-8']
     ) {
@@ -114,15 +114,15 @@ class Response
         $this->headers = new Blob($headers);
     }
 
-    /** Public functions. */
+    /** Public functions */
 
     /**
-     * Finish the response and return the object.
+     * Finish the response and return the object
      *
-     * @param  Request  Request object used create a nice response.
-     * @return Response The Response object.
+     * @param Request Request object used create a nice response
+     * @return Response The Response object
      */
-    public function finish(Request $request) : Response
+    public function finish(Request $request): Response
     {
         if ($this->finished) {
             throw new \LogicException('The response has already finished.');
@@ -142,135 +142,142 @@ class Response
     }
 
     /**
-     * Get the current response body.
+     * Get the current response body
      *
-     * @return string Response body.
+     * @return string Response body
      */
-    public function getBody() : string
+    public function getBody(): string
     {
-        return $this->body;
+        return (string) $this->body;
     }
 
     /**
-     * Get a specific response header.
+     * Get value for a specific response header
      *
-     * @param  string $key Key for header.
-     * @return mixed  Found header or null.
+     * @param string $key Key for header
+     * @return int|float|string|bool|null Value for found header or null
      */
-    public function getHeader(string $key)
+    public function getHeader(string $key): int|float|string|bool|null
     {
         return $this->headers->get($key);
     }
 
     /**
-     * Get all response headers.
+     * Get all response headers
      *
-     * @return array Response headers.
+     * @return array Response headers
      */
-    public function getHeaders() : array
+    public function getHeaders(): array
     {
         return $this->headers->all();
     }
 
     /**
-     * Get current response status code.
+     * Get current response status code
      *
-     * @return int Response status code.
+     * @return int Response status code
      */
-    public function getStatus() : int
+    public function getStatus(): int
     {
         return $this->status;
     }
 
     /**
-     * Get current response status message.
+     * Get current response status message
      *
-     * @return string Response status message.
+     * @return string Response status message
      */
-    public function getStatusMessage() : string
+    public function getStatusMessage(): string
     {
-        return static::RESPONSE_STATUSES[$this->status];
+        $message = self::$statuses[$this->status];
+
+        return "$this->status $message";
     }
 
     /**
-     * Set the response body.
+     * Set the response body
      *
-     * @param  null|scalar $body Scalar value to set.
-     * @return Response    Response object for optional chaining.
+     * @param int|float|string|bool|null $body Scalar value to set
+     * @return Response Response object for optional chaining
      */
-    public function setBody($body) : Response
+    public function setBody(int|float|string|bool|null $body): Response
     {
-        if (is_null($body) || is_scalar($body)) {
-            $this->body = (string) $body;
-
-            return $this;
-        }
-
-        $prefix = 'Body must be null or scalar, ';
-        $suffix = gettype($body) . ' given.';
-
-        throw new \InvalidArgumentException("{$prefix}{$suffix}");
-    }
-
-    /**
-     * Set a response header.
-     *
-     * @param  string   $key   Key for header.
-     * @param  mixed    $value Value for header.
-     * @return Response Response object for optional chaining.
-     */
-    public function setHeader(string $key, $value) : Response
-    {
-        $this->headers->set($key, $value);
+        $this->body = (string) $body;
 
         return $this;
     }
 
     /**
-     * Set the response status.
+     * Set a response header
      *
-     * @param  int      $status Integer value to set.
-     * @return Response Response object for optional chaining.
+     * @param string $key Key for header
+     * @param int|float|string|bool|null $value Value for header
+     * @return Response Response object for optional chaining
      */
-    public function setStatus(int $status) : Response
+    public function setHeader(string $key, int|float|string|bool|null $value): Response
     {
-        if (in_array($status, static::RESPONSE_STATUSES)) {
-            $this->status = $status;
-
-            return $this;
+        if ($value == null) {
+            $this->headers->delete($key);
+        } else {
+            $this->headers->set($key, $value);
         }
 
-        throw new \LogicException("Status code must be a valid status code, but {$status} is not.");
+        return $this;
     }
 
     /**
-     * Write (append) content to the response body.
+     * Set multiple response headers
      *
-     * @param  null|scalar $appendix Content to append.
-     * @return Response    Response object for optional chaining.
+     * @param array $headers Response headers
+     * @return Response Response object for optional chaining
      */
-    public function write($appendix) : Response
+    public function setHeaders(array $headers): Response
     {
-        if (is_null($appendix) || is_scalar($appendix)) {
-            $this->body .= (string) $appendix;
-
-            return $this;
+        foreach ($headers as $key => $value) {
+            $this->setHeader($key, $value);
         }
 
-        $prefix = 'Appended content must be null or scalar, ';
-        $suffix = gettype($appendix) . ' given.';
-
-        throw new \InvalidArgumentException("{$prefix}{$suffix}");
+        return $this;
     }
 
-    /** Protected functions. */
+    /**
+     * Set the response status
+     *
+     * @param int $status Integer value to set
+     * @return Response Response object for optional chaining
+     */
+    public function setStatus(int $status): Response
+    {
+        if (array_key_exists($status, self::$statuses) === false) {
+            throw new \InvalidArgumentException("Status code must be a valid status code, but '{$status}' is not.");
+        }
+
+        $this->status = $status;
+
+        return $this;
+    }
 
     /**
-     * Set the correct behaviour for empty and no-body responses.
+     * Write (append) content to the response body
+     *
+     * @param int|float|string|bool|null $content Content to append
+     * @return Response Response object for optional chaining
+     */
+    public function write(int|float|string|bool|null $content): Response
+    {
+        $this->body .= (string) $content;
+
+        return $this;
+    }
+
+    /** Protected functions */
+
+    /**
+     * Set the correct behaviour for empty and no-body responses
      */
     protected function setEmptyResponse()
     {
-        $empty = in_array($this->status, static::NO_BODY_STATUSES);
+        $empty = in_array($this->status, self::$no_body);
 
         if ($this->request->isHead() || $empty) {
             $this->body = null;
@@ -283,26 +290,26 @@ class Response
     }
 
     /**
-     * Echo the response body.
+     * Echo the response body
      */
     protected function writeBody()
     {
-        echo((string) $this->body);
+        echo ((string) $this->body);
     }
 
     /**
-     * Send response headers.
+     * Send response headers
      */
     protected function writeHeaders()
     {
-        if (headers_sent() === false) {
-            $status = static::RESPONSE_STATUSES[$this->status];
+        if (headers_sent()) {
+            return;
+        }
 
-            header("{$this->request->protocol} {$status}");
+        header("{$this->request->protocol} {$this->getStatusMessage()}");
 
-            foreach ($this->headers->all() as $key => $value) {
-                header("{$key}: {$value}", false);
-            }
+        foreach ($this->headers->all() as $key => $value) {
+            header("{$key}: {$value}", false);
         }
     }
 }
