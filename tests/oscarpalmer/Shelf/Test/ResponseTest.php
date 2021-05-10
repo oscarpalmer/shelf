@@ -33,7 +33,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     public function testEmptyResponses()
     {
         # Informational, no-content, and not-modified responses.
-        foreach ([100, 101, 204, 205, 301, 302, 303, 304, 307] as $status) {
+        foreach ([100, 101, 102, 103, 204, 304] as $status) {
             $response = new Response('This won\'t be echoed.', $status);
 
             $response->finish(new Request([]));

@@ -12,7 +12,7 @@ class Response
     /**
      * @var array Status codes for no-body responses
      */
-    protected static array $no_body = [100, 101, 204, 205, 301, 302, 303, 304, 307];
+    protected static array $no_body = [100, 101, 102, 103, 204, 304];
 
     /**
      * @var array Response status messages
@@ -21,6 +21,8 @@ class Response
         # Informational
         100 => 'Continue',
         101 => 'Switching Protocols',
+        102 => 'Processing',
+        103 => 'Early Hints',
 
         # Success
         200 => 'OK',
@@ -30,6 +32,9 @@ class Response
         204 => 'No Content',
         205 => 'Reset Content',
         206 => 'Partial Content',
+        207 => 'Multi-Status',
+        208 => 'Already Reported',
+        226 => 'IM Used',
 
         # Redirection
         300 => 'Multiple Choices',
@@ -38,8 +43,9 @@ class Response
         303 => 'See Other',
         304 => 'Not Modified',
         305 => 'Use Proxy',
-        306 => 'Unused',
+        306 => '(Unused)',
         307 => 'Temporary Redirect',
+        308 => 'Permanent Redirect',
 
         # Client errors
         400 => 'Bad Request',
@@ -60,6 +66,16 @@ class Response
         415 => 'Unsupported Media Type',
         416 => 'Requested Range Not Satisfiable',
         417 => 'Expectation Failed',
+        421 => 'Misdirected Request',
+        422 => 'Unprocessable Entity',
+        423 => 'Locked',
+        424 => 'Failed Dependency',
+        425 => 'Too Early',
+        426 => 'Upgrade Required',
+        428 => 'Precondition Required',
+        429 => 'Too Many Requests',
+        431 => 'Request Header Fields Too Large',
+        451 => 'Unavailable for Legal Reasons',
 
         # Server errors
         500 => 'Internal Server Error',
@@ -67,7 +83,13 @@ class Response
         502 => 'Bad Gateway',
         503 => 'Service Unavailable',
         504 => 'Gateway Timeout',
-        505 => 'HTTP Version Not Supported'
+        505 => 'HTTP Version Not Supported',
+        506 => 'Variant Also Negotiates',
+        507 => 'Insufficient Storage',
+        508 => 'Loop Detected',
+        509 => 'Bandwidth Limit Exceeded',
+        510 => 'Not Extended',
+        511 => 'Network Authentication Required'
     ];
 
     /**
