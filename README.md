@@ -1,6 +1,6 @@
 # Shelf
 
-[![PHP version](https://badge.fury.io/ph/oscarpalmer%2Fshelf.svg)](http://badge.fury.io/ph/oscarpalmer%2Fshelf) [![Build status](https://api.travis-ci.com/oscarpalmer/shelf.svg?branch=main)](https://travis-ci.com/oscarpalmer/shelf) [![Code coverage](https://codecov.io/gh/oscarpalmer/shelf/branch/main/graph/badge.svg?token=HE32BuJEmt)](https://codecov.io/gh/oscarpalmer/shelf)
+[![Latest stable version](https://poser.pugx.org/oscarpalmer/shelf/v)](//packagist.org/packages/oscarpalmer/shelf) [![Build status](https://api.travis-ci.com/oscarpalmer/shelf.svg?branch=main)](https://travis-ci.com/oscarpalmer/shelf) [![Code coverage](https://codecov.io/gh/oscarpalmer/shelf/branch/main/graph/badge.svg?token=HE32BuJEmt)](https://codecov.io/gh/oscarpalmer/shelf) [![License](https://poser.pugx.org/oscarpalmer/shelf/license)](//packagist.org/packages/oscarpalmer/shelf)
 
 Shelf is a [Rack](//rack.github.io)-like interface for PHP `>=8`.
 
@@ -13,7 +13,7 @@ Shelf is available via [Composer & Packagist](//packagist.org/packages/oscarpalm
 ```json
 {
   "require": {
-    "oscarpalmer/shelf": "3.1.*"
+    "oscarpalmer/shelf": "3.2.*"
   }
 }
 ```
