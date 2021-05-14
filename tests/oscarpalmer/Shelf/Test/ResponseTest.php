@@ -62,6 +62,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
         $response->finish($request);
 
+        $this->assertTrue($response->isFinished());
         $this->expectOutputString('Test.');
         $this->expectException(LogicException::class);
 
