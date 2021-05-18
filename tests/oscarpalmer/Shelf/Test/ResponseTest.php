@@ -2,16 +2,13 @@
 
 namespace oscarpalmer\Shelf\Test;
 
-use InvalidArgumentException;
-use LogicException;
 use oscarpalmer\Shelf\Request;
 use oscarpalmer\Shelf\Response;
-use TypeError;
 
 class ResponseTest extends \PHPUnit\Framework\TestCase
 {
-    protected $request;
-    protected $response;
+    protected Request $request;
+    protected Response $response;
 
     public function setUp(): void
     {
@@ -64,7 +61,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($response->isFinished());
         $this->expectOutputString('Test.');
-        $this->expectException(LogicException::class);
+        $this->expectException(\LogicException::class);
 
         $response->finish($request);
     }
@@ -79,6 +76,9 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertIsString($this->response->getStatusMessage());
         $this->assertSame('200 OK', $this->response->getStatusMessage());
+
+        $this->assertIsString($this->response->getStatusMessage(500));
+        $this->assertSame('500 Internal Server Error', $this->response->getStatusMessage(500));
     }
 
     public function testGetAndSetBody()
@@ -92,7 +92,8 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
         $this->assertIsString($response->getBody());
         $this->assertSame('Hello, world!', $response->getBody());
-        $this->expectException(TypeError::class);
+
+        $this->expectException(\TypeError::class);
 
         $response->setBody([]);
     }
@@ -129,7 +130,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
         $this->assertIsInt($response->getStatus());
         $this->assertSame(404, $response->getStatus());
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
 
         $response->setStatus(1234);
     }
@@ -145,7 +146,8 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
         $this->assertIsString('string', $response->getBody());
         $this->assertSame('Test. - Shelf', $response->getBody());
-        $this->expectException(TypeError::class);
+
+        $this->expectException(\TypeError::class);
 
         $response->write([]);
     }

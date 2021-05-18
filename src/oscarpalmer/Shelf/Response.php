@@ -206,15 +206,17 @@ class Response
     }
 
     /**
-     * Get current response status message
+     * Get response status message for current or specified status code
      *
+     * @param int Optional status code
      * @return string Response status message
      */
-    public function getStatusMessage(): string
+    public function getStatusMessage(int $code = null): string
     {
-        $message = self::$statuses[$this->status];
+        $status = $code ?? $this->status;
+        $message = self::$statuses[$status];
 
-        return "$this->status $message";
+        return "$status $message";
     }
 
     /**
