@@ -97,7 +97,7 @@ class Request
             return $this->$key;
         }
 
-        return $this->server->get(strtoupper($key));
+        return $this->server->get(mb_strtoupper($key, 'UTF-8'));
     }
 
     /** Public functions */

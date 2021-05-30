@@ -13,7 +13,7 @@ Shelf is available via [Composer & Packagist](//packagist.org/packages/oscarpalm
 ```json
 {
   "require": {
-    "oscarpalmer/shelf": "3.2.*"
+    "oscarpalmer/shelf": "3.4.*"
   }
 }
 ```

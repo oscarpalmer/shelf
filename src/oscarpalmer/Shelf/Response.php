@@ -153,7 +153,7 @@ class Response
 
         $this->request = $request;
 
-        $this->headers->set('content-length', strlen($this->body));
+        $this->headers->set('content-length', mb_strlen($this->getBody(), 'UTF-8'));
         $this->setEmptyResponse();
 
         $this->writeHeaders();
@@ -329,7 +329,7 @@ class Response
      */
     protected function writeBody()
     {
-        echo ((string) $this->body);
+        echo((string) $this->body);
     }
 
     /**
