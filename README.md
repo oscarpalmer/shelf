@@ -13,7 +13,7 @@ Shelf is available via [Composer & Packagist](//packagist.org/packages/oscarpalm
 ```json
 {
   "require": {
-    "oscarpalmer/shelf": "3.4.*"
+    "oscarpalmer/shelf": "3.5.*"
   }
 }
 ```
@@ -77,12 +77,14 @@ $request->isPut();
 $request->isAjax();
 
 # Getters for Blobs (described below) for accessing HTTP request information
-$request->cookies;  # $_COOKIES
-$request->data;     # $_POST
-$request->files;    # $_FILES
-$request->query;    # $_GET
-$request->server;   # $_SERVER or custom server variables
-$request->session;  # $_SESSION
+$request->getCookies(); # $_COOKIES
+$request->getData();    # $_POST
+$request->getQuery();   # $_GET
+$request->getServer();  # $_SERVER or custom server variables
+$request->getSession(); # $_SESSION
+
+# Getter for uploaded files
+$request->getFiles(); # $_FILES
 
 # Alternative to using the constructor; automatically uses the $_SERVER-variables
 # The session variable still works the same :)
@@ -108,8 +110,9 @@ $response->getHeaders();
 # Retrieves the status code 
 $response->getStatus();
 
-# Retrieves a status message for the response, e.g. '200 OK'
+# Retrieves a status message for the current response, e.g. '200 OK'
 $response->getStatusMessage();
+$response->getStatusMessage($code); # Or retrieve a specific status message
 
 # Set a scalar value as the response body
 $response->setBody($body);
