@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace oscarpalmer\Shelf;
 
+mb_internal_encoding('UTF-8');
+
+use oscarpalmer\Shelf\Blob\IBlob;
+use oscarpalmer\Shelf\Blob\Blob;
+
 /**
  * Response class
  */
@@ -213,6 +218,10 @@ class Response
      */
     public function getStatusMessage(int $code = null): string
     {
+        if (is_null($code) === false && array_key_exists($code, self::$statuses) === false) {
+            throw new \InvalidArgumentException("Status code must be a valid status code, but '{$code}' is not.");
+        }
+
         $status = $code ?? $this->status;
         $message = self::$statuses[$status];
 
@@ -237,7 +246,9 @@ class Response
      */
     public function setBody(int|float|string|bool|null $body): Response
     {
-        $this->body = (string) $body;
+        $this->body = is_null($body)
+            ? ''
+            : (string) $body;
 
         return $this;
     }
@@ -251,7 +262,7 @@ class Response
      */
     public function setHeader(string $key, int|float|string|bool|null $value): Response
     {
-        if ($value == null) {
+        if (is_null($value)) {
             $this->headers->delete($key);
         } else {
             $this->headers->set($key, $value);
@@ -300,7 +311,9 @@ class Response
      */
     public function write(int|float|string|bool|null $content): Response
     {
-        $this->body .= (string) $content;
+        $this->body .= is_null($content)
+            ? ''
+            : (string) $content;
 
         return $this;
     }
@@ -314,9 +327,11 @@ class Response
     {
         $empty = in_array($this->status, self::$no_body);
 
-        if ($this->request->isHead() || $empty) {
-            $this->body = null;
+        if ($this->request->isHead() === false && $empty === false) {
+            return;
         }
+
+        $this->body = null;
 
         if ($empty) {
             $this->headers->delete('content-length');
@@ -329,7 +344,7 @@ class Response
      */
     protected function writeBody()
     {
-        echo((string) $this->body);
+        echo(is_null($this->body) ? '' : (string) $this->body);
     }
 
     /**
@@ -341,7 +356,9 @@ class Response
             return;
         }
 
-        header("{$this->request->protocol} {$this->getStatusMessage()}");
+        $protocol = $this->request->getProtocol();
+
+        header("{$protocol} {$this->getStatusMessage()}");
 
         foreach ($this->headers->all() as $key => $value) {
             header("{$key}: {$value}", false);

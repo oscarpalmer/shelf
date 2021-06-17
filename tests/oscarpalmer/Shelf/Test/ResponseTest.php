@@ -1,6 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace oscarpalmer\Shelf\Test;
+
+mb_internal_encoding('utf-8');
 
 use oscarpalmer\Shelf\Request;
 use oscarpalmer\Shelf\Response;
@@ -79,6 +83,10 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
         $this->assertIsString($this->response->getStatusMessage(500));
         $this->assertSame('500 Internal Server Error', $this->response->getStatusMessage(500));
+
+        $this->expectException(\InvalidArgumentException::class);
+
+        $this->response->getStatusMessage(1234);
     }
 
     public function testGetAndSetBody()
@@ -92,6 +100,11 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
         $this->assertIsString($response->getBody());
         $this->assertSame('Hello, world!', $response->getBody());
+
+        $response->setBody(null);
+
+        $this->assertIsString($response->getBody());
+        $this->assertSame('', $response->getBody());
 
         $this->expectException(\TypeError::class);
 
@@ -144,7 +157,12 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
         $response->write(' - Shelf');
 
-        $this->assertIsString('string', $response->getBody());
+        $this->assertIsString($response->getBody());
+        $this->assertSame('Test. - Shelf', $response->getBody());
+
+        $response->write(null);
+
+        $this->assertIsString($response->getBody());
         $this->assertSame('Test. - Shelf', $response->getBody());
 
         $this->expectException(\TypeError::class);

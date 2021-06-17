@@ -1,6 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace oscarpalmer\Shelf\Test;
+
+mb_internal_encoding('utf-8');
 
 use oscarpalmer\Shelf\Request;
 
@@ -45,31 +49,28 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf('oscarpalmer\Shelf\Request', $superGlobalRequest);
     }
 
-    /**
-     * @covers \oscarpalmer\Shelf\Request::__get
-     * @covers \oscarpalmer\Shelf\Request::setPathInfo
-     */
-    public function testMagicalGet()
+    public function testGetters()
     {
         $request = new Request($this->request);
 
         foreach ([
-            $request->data,
-            $request->files,
-            $request->query,
-            $request->server
+            $request->getData(),
+            $request->getQuery(),
+            $request->getServer()
         ] as $blob) {
             $this->assertNotNull($blob);
-            $this->assertInstanceOf('oscarpalmer\Shelf\Blob', $blob);
+            $this->assertInstanceOf('oscarpalmer\Shelf\Blob\Blob', $blob);
         }
 
-        $this->assertInstanceOf('oscarpalmer\Shelf\Cookies', $request->cookies);
-        $this->assertInstanceOf('oscarpalmer\Shelf\Session', $request->session);
+        $this->assertInstanceOf('oscarpalmer\Shelf\Blob\Cookies', $request->getCookies());
+        $this->assertInstanceOf('oscarpalmer\Shelf\Blob\Session', $request->getSession());
 
-        $this->assertSame('/path', $request->path_info);
-        $this->assertSame('HTTP/2', $request->protocol);
-        $this->assertSame('GET', $request->request_method);
-        $this->assertNull($request->server_admin);
+        $this->assertIsArray($request->getFiles());
+
+        $this->assertSame('/path', $request->getPathInfo());
+        $this->assertSame('HTTP/2', $request->getProtocol());
+        $this->assertSame('GET', $request->getRequestMethod());
+        $this->assertNull($request->getServer()->get('SERVER_ADMIN'));
     }
 
     public function testIsAjax()

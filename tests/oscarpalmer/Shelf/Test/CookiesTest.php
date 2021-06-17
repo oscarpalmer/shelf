@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace oscarpalmer\Shelf\Test;
 
-use oscarpalmer\Shelf\Cookies;
+mb_internal_encoding('utf-8');
+
+use oscarpalmer\Shelf\Blob\Cookies;
 
 class CookiesTest extends \PHPUnit\Framework\TestCase
 {
@@ -15,7 +19,7 @@ class CookiesTest extends \PHPUnit\Framework\TestCase
     {
         $cookies = new Cookies;
 
-        $this->assertInstanceOf('oscarpalmer\Shelf\Cookies', $cookies);
+        $this->assertInstanceOf('oscarpalmer\Shelf\Blob\Cookies', $cookies);
     }
 
     /**
@@ -76,7 +80,7 @@ class CookiesTest extends \PHPUnit\Framework\TestCase
     {
         $cookies = new Cookies;
 
-        $this->assertInstanceOf('oscarpalmer\Shelf\Cookies', $cookies);
+        $this->assertInstanceOf('oscarpalmer\Shelf\Blob\Cookies', $cookies);
         $this->assertEmpty($cookies->all());
     }
 }

@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace oscarpalmer\Shelf;
+namespace oscarpalmer\Shelf\Blob;
+
+mb_internal_encoding('UTF-8');
 
 interface IBlob
 {

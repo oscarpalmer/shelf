@@ -4,17 +4,51 @@ declare(strict_types=1);
 
 namespace oscarpalmer\Shelf;
 
+mb_internal_encoding('UTF-8');
+
+use oscarpalmer\Shelf\Blob\IBlob;
+use oscarpalmer\Shelf\Blob\Blob;
+use oscarpalmer\Shelf\Blob\Cookies;
+use oscarpalmer\Shelf\Blob\Session;
+
 /**
  * Request class
  */
 class Request
 {
+    /**
+     * @var string Delete request method
+     */
     const METHOD_DELETE = 'DELETE';
+
+    /**
+     * @var string Get request method
+     */
     const METHOD_GET = 'GET';
+
+    /**
+     * @var string Head request method
+     */
     const METHOD_HEAD = 'HEAD';
+
+    /**
+     * @var string Options request method
+     */
     const METHOD_OPTIONS = 'OPTIONS';
+
+    /**
+     * @var string Patch request method
+     */
     const METHOD_PATCH = 'PATCH';
+
+    /**
+     * @var string Post request method
+     */
     const METHOD_POST = 'POST';
+
+    /**
+     * @var string Put request method
+     */
     const METHOD_PUT = 'PUT';
 
     /**
@@ -28,9 +62,9 @@ class Request
     protected IBlob $data;
 
     /**
-     * @var IBlob Files parameters
+     * @var array Files parameters
      */
-    protected IBlob $files;
+    protected array $files;
 
     /**
      * @var string Current path
@@ -38,19 +72,9 @@ class Request
     protected string $path_info;
 
     /**
-     * @var string Current protocol
-     */
-    protected string $protocol;
-
-    /**
      * @var IBlob Query parameters
      */
     protected IBlob $query;
-
-    /**
-     * @var string Current request method
-     */
-    protected string $request_method;
 
     /**
      * @var IBlob Server parameters
@@ -73,34 +97,113 @@ class Request
     {
         $this->cookies = new Cookies();
         $this->data = new Blob($_POST);
-        $this->files = new Blob($_FILES);
+        $this->files = $_FILES;
         $this->query = new Blob($_GET);
         $this->server = new Blob($server);
         $this->session = new Session($session);
 
-        $this->protocol = $this->server->get('SERVER_PROTOCOL', 'HTTP/2');
-        $this->request_method = $this->server->get('REQUEST_METHOD', self::METHOD_GET);
+        if ($this->server->has('SERVER_PROTOCOL') === false) {
+            $this->server->set('SERVER_PROTOCOL', 'HTTP/2');
+        }
+
+        if ($this->server->has('REQUEST_METHOD') === false) {
+            $this->server->set('REQUEST_METHOD', self::METHOD_GET);
+        }
 
         $this->setPathInfo();
     }
 
-    /**
-     * Get value for Request parameter
-     *
-     * @param string $key Key for parameter
-     * @return mixed Value for parameter
-     */
-    public function __get(string $key): mixed
-    {
-        # Prioritise parameters created by Shelf
-        if (isset($this->$key)) {
-            return $this->$key;
-        }
+    /** Public functions */
 
-        return $this->server->get(mb_strtoupper($key, 'UTF-8'));
+    /**
+     * Retrieve Cookies Blob
+     * 
+     * @return IBlob Cookies Blob
+     */
+    public function getCookies(): IBlob
+    {
+        return $this->cookies;
     }
 
-    /** Public functions */
+    /**
+     * Retrieve Data Blob
+     * 
+     * @return IBlob Data Blob
+     */
+    public function getData(): IBlob
+    {
+        return $this->data;
+    }
+
+    /**
+     * Retrieve Files array
+     * 
+     * @return array Files array
+     */
+    public function getFiles(): array
+    {
+        return $this->files;
+    }
+
+    /**
+     * Retrieve path information
+     * 
+     * @return IBlob Path information
+     */
+    public function getPathInfo(): string
+    {
+        return $this->path_info;
+    }
+
+    /**
+     * Retrieve HTTP protocol
+     * 
+     * @return string HTTP protocol
+     */
+    public function getProtocol(): string
+    {
+        return $this->server->get('SERVER_PROTOCOL');
+    }
+
+    /**
+     * Retrieve Query Blob
+     * 
+     * @return IBlob Query Blob
+     */
+    public function getQuery(): IBlob
+    {
+        return $this->query;
+    }
+
+    /**
+     * Retrieve HTTP request method
+     * 
+     * @return string HTTP request method
+     */
+    public function getRequestMethod(): string
+    {
+        return $this->server->get('REQUEST_METHOD');
+    }
+
+    /**
+     * Retrieve Server Blob
+     * 
+     * @return IBlob Server Blob
+     */
+    public function getServer(): IBlob
+    {
+        return $this->server;
+    }
+
+    /**
+     * Retrieve Session Blob
+     * 
+     * @return IBlob Session Blob
+     */
+    public function getSession(): IBlob
+    {
+        return $this->session;
+    }
 
     /**
      * Is it an AJAX request?
@@ -119,7 +222,7 @@ class Request
      */
     public function isDelete(): bool
     {
-        return $this->request_method === self::METHOD_DELETE;
+        return $this->getRequestMethod() === self::METHOD_DELETE;
     }
 
     /**
@@ -129,7 +232,7 @@ class Request
      */
     public function isGet(): bool
     {
-        return $this->request_method === self::METHOD_GET;
+        return $this->getRequestMethod() === self::METHOD_GET;
     }
 
     /**
@@ -139,7 +242,7 @@ class Request
      */
     public function isHead(): bool
     {
-        return $this->request_method === self::METHOD_HEAD;
+        return $this->getRequestMethod() === self::METHOD_HEAD;
     }
 
     /**
@@ -149,7 +252,7 @@ class Request
      */
     public function isOptions(): bool
     {
-        return $this->request_method === self::METHOD_OPTIONS;
+        return $this->getRequestMethod() === self::METHOD_OPTIONS;
     }
 
     /**
@@ -159,7 +262,7 @@ class Request
      */
     public function isPatch(): bool
     {
-        return $this->request_method === self::METHOD_PATCH;
+        return $this->getRequestMethod() === self::METHOD_PATCH;
     }
 
     /**
@@ -169,7 +272,7 @@ class Request
      */
     public function isPost(): bool
     {
-        return $this->request_method === self::METHOD_POST;
+        return $this->getRequestMethod() === self::METHOD_POST;
     }
 
     /**
@@ -179,7 +282,7 @@ class Request
      */
     public function isPut(): bool
     {
-        return $this->request_method === self::METHOD_PUT;
+        return $this->getRequestMethod() === self::METHOD_PUT;
     }
 
     /** Protected functions */
@@ -189,18 +292,16 @@ class Request
      */
     protected function setPathInfo(): void
     {
-        $query = $this->server->get('QUERY_STRING', '');
         $script = $this->server->get('SCRIPT_NAME', '');
-        $uri = $this->server->get('REQUEST_URI', '/');
 
         $path = preg_replace(
             [
-                '/\A' . preg_quote($script, '/') . '/',
-                '/\A' . preg_quote(dirname($script), '/') . '/',
-                '/\?' . preg_quote($query, '/') . '\z/'
+                '/\A' . preg_quote($script, '/') . '/u',
+                '/\A' . preg_quote(dirname($script), '/') . '/u',
+                '/\?' . preg_quote($this->server->get('QUERY_STRING', ''), '/') . '\z/u'
             ],
             '',
-            $uri
+            $this->server->get('REQUEST_URI', '/'),
         );
 
         $this->path_info = '/' . ltrim($path, '/');

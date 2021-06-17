@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace oscarpalmer\Shelf;
+namespace oscarpalmer\Shelf\Blob;
+
+mb_internal_encoding('UTF-8');
 
 class Cookies implements IBlob
 {
@@ -24,7 +26,9 @@ class Cookies implements IBlob
      */
     public function delete(int|string $key): Cookies
     {
-        setcookie($key, '', time() - 1);
+        if ($this->has($key)) {
+            setcookie($key, '', time() - 1);
+        }
 
         return $this;
     }
@@ -38,7 +42,11 @@ class Cookies implements IBlob
      */
     public function get(int|string $key, mixed $default = null): mixed
     {
-        return $_COOKIE[$key] ?? $default;
+        if ($this->has($key)) {
+            return $_COOKIE[$key];
+        }
+
+        return $default;
     }
 
     /**

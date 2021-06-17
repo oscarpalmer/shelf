@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace oscarpalmer\Shelf\Test;
 
-use oscarpalmer\Shelf\Session;
-use TypeError;
+mb_internal_encoding('utf-8');
+
+use oscarpalmer\Shelf\Blob\Session;
 
 class SessionTest extends \PHPUnit\Framework\TestCase
 {
@@ -16,7 +19,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     {
         $session = new Session(true);
 
-        $this->assertInstanceOf('oscarpalmer\Shelf\Session', $session);
+        $this->assertInstanceOf('oscarpalmer\Shelf\Blob\Session', $session);
     }
 
     /**
@@ -35,7 +38,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
 
     public function testBadSession()
     {
-        $this->expectException(TypeError::class);
+        $this->expectException(\TypeError::class);
 
         new Session([]);
     }
@@ -79,7 +82,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
 
         $session = new Session('my_session');
 
-        $this->assertInstanceOf('oscarpalmer\Shelf\Session', $session);
+        $this->assertInstanceOf('oscarpalmer\Shelf\Blob\Session', $session);
         $this->assertEmpty($session->all());
     }
 
@@ -90,7 +93,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     {
         $session = new Session(false);
 
-        $this->assertInstanceOf('oscarpalmer\Shelf\Session', $session);
+        $this->assertInstanceOf('oscarpalmer\Shelf\Blob\Session', $session);
         $this->assertEmpty($session->all());
     }
 }

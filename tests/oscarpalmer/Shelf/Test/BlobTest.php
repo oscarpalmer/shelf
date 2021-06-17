@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace oscarpalmer\Shelf\Test;
 
-use oscarpalmer\Shelf\Blob;
+mb_internal_encoding('utf-8');
+
+use oscarpalmer\Shelf\Blob\Blob;
 
 class BlobTest extends \PHPUnit\Framework\TestCase
 {
@@ -21,7 +25,7 @@ class BlobTest extends \PHPUnit\Framework\TestCase
     public function testConstructor()
     {
         $this->assertNotNull($this->blob);
-        $this->assertInstanceOf('oscarpalmer\Shelf\Blob', $this->blob);
+        $this->assertInstanceOf('oscarpalmer\Shelf\Blob\Blob', $this->blob);
     }
 
     public function testDelete()

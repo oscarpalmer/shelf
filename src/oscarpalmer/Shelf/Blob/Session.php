@@ -2,8 +2,13 @@
 
 declare(strict_types=1);
 
-namespace oscarpalmer\Shelf;
+namespace oscarpalmer\Shelf\Blob;
 
+mb_internal_encoding('UTF-8');
+
+/**
+ * Session class
+ */
 class Session implements IBlob
 {
     /**
@@ -36,7 +41,7 @@ class Session implements IBlob
      */
     public function delete(int|string $key): Session
     {
-        if (array_key_exists($key, $_SESSION)) {
+        if ($this->has($key)) {
             unset($_SESSION[$key]);
         }
 
@@ -52,7 +57,11 @@ class Session implements IBlob
      */
     public function get(int|string $key, mixed $default = null): mixed
     {
-        return $_SESSION[$key] ?? $default;
+        if ($this->has($key)) {
+            return $_SESSION[$key];
+        }
+
+        return $default;
     }
 
     /**
