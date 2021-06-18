@@ -10,6 +10,7 @@ use oscarpalmer\Shelf\Blob\IBlob;
 use oscarpalmer\Shelf\Blob\Blob;
 use oscarpalmer\Shelf\Blob\Cookies;
 use oscarpalmer\Shelf\Blob\Session;
+use oscarpalmer\Shelf\Files\Files;
 
 /**
  * Request class
@@ -62,9 +63,9 @@ class Request
     protected IBlob $data;
 
     /**
-     * @var array Files parameters
+     * @var Files Files object
      */
-    protected array $files;
+    protected Files $files;
 
     /**
      * @var string Current path
@@ -97,7 +98,7 @@ class Request
     {
         $this->cookies = new Cookies();
         $this->data = new Blob($_POST);
-        $this->files = $_FILES;
+        $this->files = new Files($_FILES);
         $this->query = new Blob($_GET);
         $this->server = new Blob($server);
         $this->session = new Session($session);
@@ -136,11 +137,11 @@ class Request
     }
 
     /**
-     * Retrieve Files array
+     * Retrieve Files object
      * 
-     * @return array Files array
+     * @return array Files object
      */
-    public function getFiles(): array
+    public function getFiles(): Files
     {
         return $this->files;
     }

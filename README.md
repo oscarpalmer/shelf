@@ -13,7 +13,7 @@ Shelf is available via [Composer & Packagist](//packagist.org/packages/oscarpalm
 ```json
 {
   "require": {
-    "oscarpalmer/shelf": "3.5.*"
+    "oscarpalmer/shelf": "3.6.*"
   }
 }
 ```
@@ -83,7 +83,7 @@ $request->getQuery();   # $_GET
 $request->getServer();  # $_SERVER or custom server variables
 $request->getSession(); # $_SESSION
 
-# Getter for uploaded files
+# Getter for uploaded files; a more detailed description can be found below
 $request->getFiles(); # $_FILES
 
 # Alternative to using the constructor; automatically uses the $_SERVER-variables
@@ -128,6 +128,25 @@ $response->setStatus($status);
 
 # Append scalar value to the response body
 $response->write($content);
+```
+
+### Files
+
+Uploaded files can be accessed with `$request->getFiles()` which returns a `Files`-object containing a `File`-object for each file.
+
+```php
+# Files
+
+$files->name;              # Returns a File, or array of Files
+$files->get('name');       # A less magical version of the above
+
+# File
+
+$file->getError();         # Error code for uploaded file
+$file->getName();          # Original file name for uploaded file
+$file->getSize();          # File size for uploaded file
+$file->getTemporaryName(); # Temporary file name for uploaded file
+$file->getType();          # File type for uploaded file
 ```
 
 ### Blob

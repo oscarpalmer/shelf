@@ -65,7 +65,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf('oscarpalmer\Shelf\Blob\Cookies', $request->getCookies());
         $this->assertInstanceOf('oscarpalmer\Shelf\Blob\Session', $request->getSession());
 
-        $this->assertIsArray($request->getFiles());
+        $this->assertInstanceOf('oscarpalmer\Shelf\Files\Files', $request->getFiles());
 
         $this->assertSame('/path', $request->getPathInfo());
         $this->assertSame('HTTP/2', $request->getProtocol());

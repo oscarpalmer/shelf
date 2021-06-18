@@ -344,7 +344,7 @@ class Response
      */
     protected function writeBody()
     {
-        echo(is_null($this->body) ? '' : (string) $this->body);
+        echo (is_null($this->body) ? '' : (string) $this->body);
     }
 
     /**
