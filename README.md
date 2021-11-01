@@ -2,7 +2,9 @@
 
 [![Latest stable version](https://poser.pugx.org/oscarpalmer/shelf/v)](//packagist.org/packages/oscarpalmer/shelf) [![Build status](https://api.travis-ci.com/oscarpalmer/shelf.svg?branch=main)](https://travis-ci.com/oscarpalmer/shelf) [![Code coverage](https://codecov.io/gh/oscarpalmer/shelf/branch/main/graph/badge.svg?token=HE32BuJEmt)](https://codecov.io/gh/oscarpalmer/shelf) [![License](https://poser.pugx.org/oscarpalmer/shelf/license)](//packagist.org/packages/oscarpalmer/shelf)
 
-Shelf is a [Rack](//rack.github.io)-like interface for PHP `>=8`.
+Shelf is a [Rack](//rack.github.io)-like interface for PHP `>=8`, but is not actively maintained.
+
+If you need to work with requests and responses in PHP, please consider using [a PSR-7 compliant library](https://github.com/topics/psr-7). :smile:
 
 ## Getting started
 
